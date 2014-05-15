@@ -5,7 +5,7 @@
 #include <math.h>
 #include <gtk/gtk.h>
 
-#include "ui.h"
+#include "UI/ui.h"
 #include "main.h"
 
 /* main
