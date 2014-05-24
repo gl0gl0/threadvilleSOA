@@ -18,20 +18,24 @@ gint unit = 20;
  *
  * @return void
  */
- void drawBlock (GtkWidget *widget, gint x, gint y) {
+ void drawBlock (GtkWidget *widget, gint x, gint y, short int lower, short int upper) {
  	gdk_draw_rectangle(this.pixMap, widget->style->white_gc, TRUE, x, y, 120, 120);
 	// Upper left
-	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, (x+20), y, 20, 20);
+	if (upper)
+		gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, (x+20), y, 20, 20);
 	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, x, (y+20), 20, 20);
 	// Lower left
 	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, x, (y+80), 20, 20);
-	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, (x+20), (y+100), 20, 20);
+	if (lower)
+		gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, (x+20), (y+100), 20, 20);
 	// Upper right
-	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, (x+80), y, 20, 20);
+	if (upper)
+		gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, (x+80), y, 20, 20);
 	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, (x+100), (y+20), 20, 20);
 	// Lower right
 	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, (x+100), (y+80), 20, 20);
-	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, (x+80), (y+100), 20, 20);
+	if (lower)
+		gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, (x+80), (y+100), 20, 20);
  }
 
 
@@ -52,46 +56,46 @@ void drawThreadville (GtkWidget *widget) {
 	//gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, boder_width, window_height-20, window_width, unit); // bottom
 
 	// Uptown Blocks - top
-	drawBlock (widget, 40, 20);
-	drawBlock (widget, 200, 20);
-	drawBlock (widget, 360, 20);
-	drawBlock (widget, 520, 20);
-	drawBlock (widget, 680, 20);
-	drawBlock (widget, 840, 20);
+	drawBlock (widget, 40, 20, 1, 1);
+	drawBlock (widget, 200, 20, 1, 1);
+	drawBlock (widget, 360, 20, 1, 1);
+	drawBlock (widget, 520, 20, 1, 1);
+	drawBlock (widget, 680, 20, 1, 1);
+	drawBlock (widget, 840, 20, 1, 1);
 
 	//gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, 20, 140, 960, unit);
 
 	// Uptown Blocks - bottom
-	drawBlock (widget, 40, 160);
-	drawBlock (widget, 200, 160);
-	drawBlock (widget, 360, 160);
-	drawBlock (widget, 520, 160);
-	drawBlock (widget, 680, 160);
-	drawBlock (widget, 840, 160);
+	drawBlock (widget, 40, 160, 0, 1);
+	drawBlock (widget, 200, 160, 0, 1);
+	drawBlock (widget, 360, 160, 0, 1);
+	drawBlock (widget, 520, 160, 0, 1);
+	drawBlock (widget, 680, 160, 0, 1);
+	drawBlock (widget, 840, 160, 0, 1);
 
 	//gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, 20, 300, 960, 80);
 	gdk_draw_rectangle(this.pixMap, widget->style->bg_gc[0], TRUE, 20, 280, 960, 20);
 	gdk_draw_rectangle(this.pixMap, widget->style->bg_gc[0], TRUE, 20, 380, 960, 20);
 
 	// Downtonw Blocks - top
-	drawBlock (widget, 40, 400);
-	drawBlock (widget, 200, 400);
-	drawBlock (widget, 360, 400);
-	drawBlock (widget, 520, 400);
-	drawBlock (widget, 680, 400);
-	drawBlock (widget, 840, 400);
+	drawBlock (widget, 40, 400, 1, 0);
+	drawBlock (widget, 200, 400, 1, 0);
+	drawBlock (widget, 360, 400, 1, 0);
+	drawBlock (widget, 520, 400, 1, 0);
+	drawBlock (widget, 680, 400, 1, 0);
+	drawBlock (widget, 840, 400, 1, 0);
 
 	//gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, 20, 520, 960, unit);
 
 	// Downtonw Blocks - bottom
-	drawBlock (widget, 40, 540);
-	drawBlock (widget, 200, 540);
-	drawBlock (widget, 360, 540);
-	drawBlock (widget, 520, 540);
-	drawBlock (widget, 680, 540);
-	drawBlock (widget, 840, 540);
+	drawBlock (widget, 40, 540, 1, 1);
+	drawBlock (widget, 200, 540, 1, 1);
+	drawBlock (widget, 360, 540, 1, 1);
+	drawBlock (widget, 520, 540, 1, 1);
+	drawBlock (widget, 680, 540, 1, 1);
+	drawBlock (widget, 840, 540, 1, 1);
 
-	// Side borders
+	// Side borders ** tal vez no se ocupen por la rotonda
 	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, boder_width, 0, unit, window_height); // left
 	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, window_width, 0, unit, window_height); // right
 
