@@ -6,9 +6,11 @@
 #include "ui.h"
 #include "global.h"
 
-gint boder_width = 20;
-gint window_width = 960;
+gint window_width = 1120;
 gint window_height = 680;
+gint border_width = 80;
+gint canvas_width = 960;
+gint canvas_height = 680;
 
 gint unit = 20;
 
@@ -19,6 +21,7 @@ gint unit = 20;
  * @return void
  */
  void drawBlock (GtkWidget *widget, gint x, gint y, short int lower, short int upper) {
+ 	x = x + border_width;
  	gdk_draw_rectangle(this.pixMap,  widget->style->fg_gc[0], TRUE, x, y, 120, 120);
 	// Upper left
 	if (upper)
@@ -49,71 +52,67 @@ void drawThreadville (GtkWidget *widget) {
 	gdk_draw_rectangle(this.pixMap, widget->style->bg_gc[0], TRUE, 0, 0, widget->allocation.width, widget->allocation.height);
 	
 	// Streets
-	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, boder_width, 0, window_width, window_height);
+	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, border_width, 0, canvas_width, canvas_height);
 
 	// Uptown Blocks - top
-	drawBlock (widget, 40, 20, 1, 1);
-	drawBlock (widget, 200, 20, 1, 1);
-	drawBlock (widget, 360, 20, 1, 1);
-	drawBlock (widget, 520, 20, 1, 1);
-	drawBlock (widget, 680, 20, 1, 1);
-	drawBlock (widget, 840, 20, 1, 1);
+	drawBlock (widget, 20, 20, 1, 1);
+	drawBlock (widget, 180, 20, 1, 1);
+	drawBlock (widget, 340, 20, 1, 1);
+	drawBlock (widget, 500, 20, 1, 1);
+	drawBlock (widget, 660, 20, 1, 1);
+	drawBlock (widget, 820, 20, 1, 1);
 
 	// Uptown Blocks - bottom
-	drawBlock (widget, 40, 160, 0, 1);
-	drawBlock (widget, 200, 160, 0, 1);
-	drawBlock (widget, 360, 160, 0, 1);
-	drawBlock (widget, 520, 160, 0, 1);
-	drawBlock (widget, 680, 160, 0, 1);
-	drawBlock (widget, 840, 160, 0, 1);
+	drawBlock (widget, 20, 160, 0, 1);
+	drawBlock (widget, 180, 160, 0, 1);
+	drawBlock (widget, 340, 160, 0, 1);
+	drawBlock (widget, 500, 160, 0, 1);
+	drawBlock (widget, 660, 160, 0, 1);
+	drawBlock (widget, 820, 160, 0, 1);
 
-	gdk_draw_rectangle(this.pixMap, widget->style->bg_gc[0], TRUE, 20, 280, 960, 20);
+	gdk_draw_rectangle(this.pixMap, widget->style->bg_gc[0], TRUE, border_width+unit, 280, 920, 20);
 
 	// Central Lines
-	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], 20, 320, 960, 320);
-	gdk_draw_line(this.pixMap, widget->style->bg_gc[0], 20, 340, 960, 340);
-	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], 20, 360, 960, 360);
+	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], border_width+unit, 320, window_width-border_width-unit, 320);
+	gdk_draw_line(this.pixMap, widget->style->bg_gc[0], border_width+unit, 340, window_width-border_width-unit, 340);
+	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], border_width+unit, 360, window_width-border_width-unit, 360);
 
-	gdk_draw_rectangle(this.pixMap, widget->style->bg_gc[0], TRUE, 20, 380, 960, 20);
+	gdk_draw_rectangle(this.pixMap, widget->style->bg_gc[0], TRUE, border_width+unit, 380, 920, 20);
 
 	// Downtonw Blocks - top
-	drawBlock (widget, 40, 400, 1, 0);
-	drawBlock (widget, 200, 400, 1, 0);
-	drawBlock (widget, 360, 400, 1, 0);
-	drawBlock (widget, 520, 400, 1, 0);
-	drawBlock (widget, 680, 400, 1, 0);
-	drawBlock (widget, 840, 400, 1, 0);
+	drawBlock (widget, 20, 400, 1, 0);
+	drawBlock (widget, 180, 400, 1, 0);
+	drawBlock (widget, 340, 400, 1, 0);
+	drawBlock (widget, 500, 400, 1, 0);
+	drawBlock (widget, 660, 400, 1, 0);
+	drawBlock (widget, 820, 400, 1, 0);
 
 	// Downtonw Blocks - bottom
-	drawBlock (widget, 40, 540, 1, 1);
-	drawBlock (widget, 200, 540, 1, 1);
-	drawBlock (widget, 360, 540, 1, 1);
-	drawBlock (widget, 520, 540, 1, 1);
-	drawBlock (widget, 680, 540, 1, 1);
-	drawBlock (widget, 840, 540, 1, 1);
-
-	// Side borders ** tal vez no se ocupen por la rotonda
-	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, boder_width, 0, unit, window_height); // left
-	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, window_width, 0, unit, window_height); // right
+	drawBlock (widget, 20, 540, 1, 1);
+	drawBlock (widget, 180, 540, 1, 1);
+	drawBlock (widget, 340, 540, 1, 1);
+	drawBlock (widget, 500, 540, 1, 1);
+	drawBlock (widget, 660, 540, 1, 1);
+	drawBlock (widget, 820, 540, 1, 1);
 
 	// Bridges
-	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, 170, 280, 20, unit*6);
-	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, 330, 280, 20, unit*6);
-	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, 490, 280, 20, unit*6);
-	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, 650, 280, 20, unit*6);
-	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, 810, 280, 20, unit*6);
+	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, border_width+150, 280, 20, unit*6);
+	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, border_width+310, 280, 20, unit*6);
+	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, border_width+470, 280, 20, unit*6);
+	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, border_width+630, 280, 20, unit*6);
+	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, border_width+790, 280, 20, unit*6);
 
 	// Vertical lines
-	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], 180, 20, 180, 280);
-	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], 340, 20, 340, 280);
-	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], 500, 20, 500, 280);
-	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], 660, 20, 660, 280);
-	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], 820, 20, 820, 280);
-	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], 180, 400, 180, 660);
-	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], 340, 400, 340, 660);
-	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], 500, 400, 500, 660);
-	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], 660, 400, 660, 660);
-	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], 820, 400, 820, 660);
+	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], border_width+160, 20, border_width+160, 280);
+	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], border_width+320, 20, border_width+320, 280);
+	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], border_width+480, 20, border_width+480, 280);
+	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], border_width+640, 20, border_width+640, 280);
+	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], border_width+800, 20, border_width+800, 280);
+	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], border_width+160, 400, border_width+160, 660);
+	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], border_width+320, 400, border_width+320, 660);
+	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], border_width+480, 400, border_width+480, 660);
+	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], border_width+640, 400, border_width+640, 660);
+	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], border_width+800, 400, border_width+800, 660);
 }
 
 
@@ -153,7 +152,7 @@ void createDrawingArea () {
 
 	// Creates drawing area with the specified dimensions and background color
 	this.drawingArea = gtk_drawing_area_new();
-	gtk_drawing_area_size((GtkDrawingArea*) this.drawingArea, 1000, 680);
+	gtk_drawing_area_size((GtkDrawingArea*) this.drawingArea, window_width, window_height);
 	gtk_widget_modify_bg((GtkWidget*) this.drawingArea, GTK_STATE_NORMAL, &color);
 	gdk_color_parse("yellow", &color);
 	gtk_widget_modify_fg((GtkWidget*) this.drawingArea, GTK_STATE_NORMAL, &color);
@@ -172,7 +171,7 @@ void createDrawingArea () {
  */
 void createWindow () {
 	this.mainWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_default_size((GtkWindow*) this.mainWindow, 1000, 680);
+	gtk_window_set_default_size((GtkWindow*) this.mainWindow, window_width, window_height);
 	gtk_window_set_title((GtkWindow*) this.mainWindow, "Threadville");
 	gtk_window_set_position((GtkWindow*) this.mainWindow, GTK_WIN_POS_CENTER_ALWAYS);
 
