@@ -6,6 +6,104 @@
 #include "ui.h"
 #include "global.h"
 
+gint boder_width = 20;
+gint window_width = 960;
+gint window_height = 680;
+
+gint unit = 20;
+
+
+/* drawThreadville
+ * Draws the main scene
+ *
+ * @return void
+ */
+ void drawBlock (GtkWidget *widget, gint x, gint y) {
+ 	gdk_draw_rectangle(this.pixMap, widget->style->white_gc, TRUE, x, y, 120, 120);
+	// Upper left
+	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, (x+20), y, 20, 20);
+	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, x, (y+20), 20, 20);
+	// Lower left
+	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, x, (y+80), 20, 20);
+	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, (x+20), (y+100), 20, 20);
+	// Upper right
+	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, (x+80), y, 20, 20);
+	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, (x+100), (y+20), 20, 20);
+	// Lower right
+	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, (x+100), (y+80), 20, 20);
+	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, (x+80), (y+100), 20, 20);
+ }
+
+
+/* drawThreadville
+ * Draws the main scene
+ *
+ * @return void
+ */
+void drawThreadville (GtkWidget *widget) {
+	// Background
+	gdk_draw_rectangle(this.pixMap, widget->style->bg_gc[0], TRUE, 0, 0, widget->allocation.width, widget->allocation.height);
+	
+	// Streets
+	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, boder_width, 0, window_width, window_height);
+	//gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, boder_width, 0, window_width, unit); // top
+	//gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, boder_width, 0, unit, window_height); // left
+	//gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, window_width, 0, unit, window_height); // right
+	//gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, boder_width, window_height-20, window_width, unit); // bottom
+
+	// Uptown Blocks - top
+	drawBlock (widget, 40, 20);
+	drawBlock (widget, 200, 20);
+	drawBlock (widget, 360, 20);
+	drawBlock (widget, 520, 20);
+	drawBlock (widget, 680, 20);
+	drawBlock (widget, 840, 20);
+
+	//gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, 20, 140, 960, unit);
+
+	// Uptown Blocks - bottom
+	drawBlock (widget, 40, 160);
+	drawBlock (widget, 200, 160);
+	drawBlock (widget, 360, 160);
+	drawBlock (widget, 520, 160);
+	drawBlock (widget, 680, 160);
+	drawBlock (widget, 840, 160);
+
+	//gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, 20, 300, 960, 80);
+	gdk_draw_rectangle(this.pixMap, widget->style->bg_gc[0], TRUE, 20, 280, 960, 20);
+	gdk_draw_rectangle(this.pixMap, widget->style->bg_gc[0], TRUE, 20, 380, 960, 20);
+
+	// Downtonw Blocks - top
+	drawBlock (widget, 40, 400);
+	drawBlock (widget, 200, 400);
+	drawBlock (widget, 360, 400);
+	drawBlock (widget, 520, 400);
+	drawBlock (widget, 680, 400);
+	drawBlock (widget, 840, 400);
+
+	//gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, 20, 520, 960, unit);
+
+	// Downtonw Blocks - bottom
+	drawBlock (widget, 40, 540);
+	drawBlock (widget, 200, 540);
+	drawBlock (widget, 360, 540);
+	drawBlock (widget, 520, 540);
+	drawBlock (widget, 680, 540);
+	drawBlock (widget, 840, 540);
+
+	// Side borders
+	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, boder_width, 0, unit, window_height); // left
+	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, window_width, 0, unit, window_height); // right
+
+	// Bridges
+	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, 170, 280, 20, unit*6);
+	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, 330, 280, 20, unit*6);
+	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, 490, 280, 20, unit*6);
+	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, 650, 280, 20, unit*6);
+	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, 810, 280, 20, unit*6);
+}
+
+
 /* --------------------------- EVENTS --------------------------- */
 
 void gtk_expose_event (GtkWidget *widget, GdkEventExpose *event) {
@@ -23,8 +121,7 @@ void gtk_configure_event (GtkWidget *widget, GdkEventConfigure *event) {
 
 	this.pixMap = gdk_pixmap_new(widget->window, widget->allocation.width, widget->allocation.height, -1);
 
-	gdk_draw_rectangle(this.pixMap, widget->style->bg_gc[0], TRUE, 0, 0, widget->allocation.width, widget->allocation.height);
-	gdk_draw_rectangle(this.pixMap, widget->style->white_gc, TRUE, 0, 0, widget->allocation.width, 20);
+	drawThreadville(widget);
 }
 
 
@@ -43,7 +140,7 @@ void createDrawingArea () {
 
 	// Creates drawing area with the specified dimensions and background color
 	this.drawingArea = gtk_drawing_area_new();
-	gtk_drawing_area_size((GtkDrawingArea*) this.drawingArea, 1000, 600);
+	gtk_drawing_area_size((GtkDrawingArea*) this.drawingArea, 1000, 680);
 	gtk_widget_modify_bg((GtkWidget*) this.drawingArea, GTK_STATE_NORMAL, &color);
 
 	// Attach events to the drawing area
@@ -60,7 +157,7 @@ void createDrawingArea () {
  */
 void createWindow () {
 	this.mainWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_default_size((GtkWindow*) this.mainWindow, 1000, 600);
+	gtk_window_set_default_size((GtkWindow*) this.mainWindow, 1000, 680);
 	gtk_window_set_title((GtkWindow*) this.mainWindow, "Threadville");
 	gtk_window_set_position((GtkWindow*) this.mainWindow, GTK_WIN_POS_CENTER_ALWAYS);
 
