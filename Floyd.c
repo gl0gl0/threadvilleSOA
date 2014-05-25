@@ -31,11 +31,6 @@ void llenarMatriz(){
 	}
 }
 
-	A	B	C
-A	0	C	1
-B		0	1
-C	1		0
-
 void Floyd(){
 	int i, j, k;
 	for (k=0; k<N; k++){
