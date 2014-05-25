@@ -20,7 +20,7 @@ gint unit = 20;
  *
  * @return void
  */
- void drawBlock (GtkWidget *widget, gint x, gint y, short int lower, short int upper) {
+ void drawBlock (GtkWidget *widget, gint x, gint y, short int lower, short int upper, const gchar* string) {
  	x = x + border_width;
  	gdk_draw_rectangle(this.pixMap,  widget->style->fg_gc[0], TRUE, x, y, 120, 120);
 	// Upper left
@@ -39,6 +39,8 @@ gint unit = 20;
 	gdk_draw_rectangle(this.pixMap, widget->style->white_gc, TRUE, (x+100), (y+80), 20, 20);
 	if (lower)
 		gdk_draw_rectangle(this.pixMap, widget->style->white_gc, TRUE, (x+80), (y+100), 20, 20);
+
+	gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-300-*-*-*-*-iso8859-1"), widget->style->black_gc, (x+50), (y+70), string);
  }
 
 
@@ -55,20 +57,20 @@ void drawThreadville (GtkWidget *widget) {
 	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, border_width, 0, canvas_width, canvas_height);
 
 	// Uptown Blocks - top
-	drawBlock (widget, 20, 20, 1, 1);
-	drawBlock (widget, 180, 20, 1, 1);
-	drawBlock (widget, 340, 20, 1, 1);
-	drawBlock (widget, 500, 20, 1, 1);
-	drawBlock (widget, 660, 20, 1, 1);
-	drawBlock (widget, 820, 20, 1, 1);
+	drawBlock (widget, 20, 20, 1, 1, "A");
+	drawBlock (widget, 180, 20, 1, 1, "B");
+	drawBlock (widget, 340, 20, 1, 1, "C");
+	drawBlock (widget, 500, 20, 1, 1, "D");
+	drawBlock (widget, 660, 20, 1, 1, "E");
+	drawBlock (widget, 820, 20, 1, 1, "F");
 
 	// Uptown Blocks - bottom
-	drawBlock (widget, 20, 160, 0, 1);
-	drawBlock (widget, 180, 160, 0, 1);
-	drawBlock (widget, 340, 160, 0, 1);
-	drawBlock (widget, 500, 160, 0, 1);
-	drawBlock (widget, 660, 160, 0, 1);
-	drawBlock (widget, 820, 160, 0, 1);
+	drawBlock (widget, 20, 160, 0, 1, "G");
+	drawBlock (widget, 180, 160, 0, 1, "H");
+	drawBlock (widget, 340, 160, 0, 1, "I");
+	drawBlock (widget, 500, 160, 0, 1, "J");
+	drawBlock (widget, 660, 160, 0, 1, "K");
+	drawBlock (widget, 820, 160, 0, 1, "L");
 
 	gdk_draw_rectangle(this.pixMap, widget->style->bg_gc[0], TRUE, border_width+unit, 280, 920, 20);
 
@@ -80,20 +82,20 @@ void drawThreadville (GtkWidget *widget) {
 	gdk_draw_rectangle(this.pixMap, widget->style->bg_gc[0], TRUE, border_width+unit, 380, 920, 20);
 
 	// Downtonw Blocks - top
-	drawBlock (widget, 20, 400, 1, 0);
-	drawBlock (widget, 180, 400, 1, 0);
-	drawBlock (widget, 340, 400, 1, 0);
-	drawBlock (widget, 500, 400, 1, 0);
-	drawBlock (widget, 660, 400, 1, 0);
-	drawBlock (widget, 820, 400, 1, 0);
+	drawBlock (widget, 20, 400, 1, 0, "M");
+	drawBlock (widget, 180, 400, 1, 0, "N");
+	drawBlock (widget, 340, 400, 1, 0, "O");
+	drawBlock (widget, 500, 400, 1, 0, "P");
+	drawBlock (widget, 660, 400, 1, 0, "Q");
+	drawBlock (widget, 820, 400, 1, 0, "R");
 
 	// Downtonw Blocks - bottom
-	drawBlock (widget, 20, 540, 1, 1);
-	drawBlock (widget, 180, 540, 1, 1);
-	drawBlock (widget, 340, 540, 1, 1);
-	drawBlock (widget, 500, 540, 1, 1);
-	drawBlock (widget, 660, 540, 1, 1);
-	drawBlock (widget, 820, 540, 1, 1);
+	drawBlock (widget, 20, 540, 1, 1, "S");
+	drawBlock (widget, 180, 540, 1, 1, "T");
+	drawBlock (widget, 340, 540, 1, 1, "U");
+	drawBlock (widget, 500, 540, 1, 1, "V");
+	drawBlock (widget, 660, 540, 1, 1, "W");
+	drawBlock (widget, 820, 540, 1, 1, "X");
 
 	// Bridges
 	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, border_width+150, 280, 20, unit*6);
@@ -113,6 +115,16 @@ void drawThreadville (GtkWidget *widget) {
 	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], border_width+480, 400, border_width+480, 660);
 	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], border_width+640, 400, border_width+640, 660);
 	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], border_width+800, 400, border_width+800, 660);
+
+	// Rotondas Y
+	gdk_draw_arc(this.pixMap, widget->style->black_gc, TRUE, 0, 280, 120, 120, 0, 360*64);
+	gdk_draw_arc(this.pixMap, widget->style->bg_gc[0], TRUE, 20, 300, 80, 80, 0, 360*64);
+	gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-300-*-*-*-*-iso8859-1"), widget->style->black_gc, 50, 355, "Y");
+
+	// Rotondas Z
+	gdk_draw_arc(this.pixMap, widget->style->black_gc, TRUE, border_width+canvas_width-unit*2, 280, 120, 120, 0, 360*64);
+	gdk_draw_arc(this.pixMap, widget->style->bg_gc[0], TRUE, border_width+canvas_width-unit, 300, 80, 80, 0, 360*64);
+	gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-300-*-*-*-*-iso8859-1"), widget->style->black_gc, border_width+canvas_width+10, 355, "Z");
 }
 
 
