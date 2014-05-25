@@ -177,6 +177,8 @@ void gtk_expose_event (GtkWidget *widget, GdkEventExpose *event) {
 			event->area.x, event->area.y,
 			event->area.x, event->area.y,
 			event->area.width, event->area.height);
+
+	drawThreadville(widget);
 }
 
 void gtk_configure_event (GtkWidget *widget, GdkEventConfigure *event) {
@@ -184,8 +186,6 @@ void gtk_configure_event (GtkWidget *widget, GdkEventConfigure *event) {
 		g_object_unref(this.pixMap);
 
 	this.pixMap = gdk_pixmap_new(widget->window, widget->allocation.width, widget->allocation.height, -1);
-
-	drawThreadville(widget);
 }
 
 
