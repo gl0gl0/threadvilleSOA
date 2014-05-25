@@ -2,9 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gtk/gtk.h>
+#include <pthread.h>
 
 #include "ui.h"
 #include "global.h"
+
+static int currently_drawing = 0;
 
 gint window_width = 1120;
 gint window_height = 680;
@@ -15,8 +18,45 @@ gint canvas_height = 680;
 gint unit = 20;
 
 
-/* drawThreadville
- * Draws the main scene
+GdkRectangle car;
+
+//do_draw will be executed in a separate thread whenever we would like to update
+//our animation
+void *do_draw(void *ptr){
+    currently_drawing = 1;
+
+    //When dealing with gdkPixmap's, we need to make sure not to
+    //access them from outside gtk_main().
+    gdk_threads_enter();
+	car.y = car.y - 20;
+	gdk_draw_rectangle(this.pixMap, this.drawingArea->style->white_gc, TRUE, car.x, car.y, car.width, car.height);
+    gdk_threads_leave();
+
+    currently_drawing = 0;
+
+    return NULL;
+}
+
+
+/* drawCar
+ * Draws a car
+ *
+ * @return void
+ */
+void drawCar (gint x, gint y) {
+	GdkRectangle car;
+
+	car.x = x;
+	car.y = y;
+	car.width = 10;
+	car.height = 15;
+	gdk_draw_rectangle(this.pixMap, this.drawingArea->style->white_gc, TRUE, car.x, car.y, car.width, car.height);
+
+	gtk_widget_queue_draw_area(this.drawingArea, car.x, car.y, car.width, car.height);
+}
+
+/* drawBlock
+ * Draws a block with the specified x,y and letter
  *
  * @return void
  */
@@ -191,6 +231,34 @@ void createWindow () {
 	gtk_signal_connect((GtkObject*) this.mainWindow, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 }
 
+gboolean loop (GtkWidget *window) {
+	static gboolean first_execution = TRUE;
+
+	// use a safe function to get the value of currently_drawing
+    int drawing_status = g_atomic_int_get(&currently_drawing);
+
+    //if we are not currently drawing anything, launch a thread to 
+    //update our pixmap
+    if(drawing_status == 0){
+        static pthread_t thread_info;
+        int  iret;
+        if(first_execution != TRUE){
+            pthread_join(thread_info, NULL);
+        }
+        iret = pthread_create( &thread_info, NULL, do_draw, NULL);
+    }
+
+    //tell our drawing area it is time to draw our animation.
+    int width, height;
+    gdk_drawable_get_size(this.pixMap, &width, &height);
+    gtk_widget_queue_draw_area(this.drawingArea, 0, 0, width, height);
+
+    first_execution = FALSE;
+
+    return TRUE;
+
+}
+
 /* display
  * Shows all elements, in order
  *
@@ -208,9 +276,29 @@ void display () {
  * @return void
  */
 void initUI () {
+	car.x = 85;
+	car.y = 200;
+	car.width = 10;
+	car.height = 15;
+
 	createWindow ();
 	createDrawingArea();
     display();
 
+    //we can turn off gtk's automatic painting and double buffering routines.
+    gtk_widget_set_app_paintable(this.drawingArea, TRUE);
+    gtk_widget_set_double_buffered(this.drawingArea, FALSE);
+
+    (void)g_timeout_add(100, (GSourceFunc)loop, this.drawingArea);
+
     gtk_main();
+
+    /*drawCar(border_width+5, 200);
+    sleep(2);
+    drawCar(border_width+5, 180);
+	sleep(2);
+    drawCar(border_width+5, 160);
+    sleep(2);
+    drawCar(border_width+5, 140);
+    sleep(2);*/
 }

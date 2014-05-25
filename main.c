@@ -6,7 +6,6 @@
 #include <gtk/gtk.h>
 
 #include "UI/ui.h"
-#include "main.h"
 
 /* main
  * Initializes the program
@@ -17,8 +16,16 @@
  * @return success/failure
  */
 int main(int argc, char *argv[]) {
+	//we need to initialize all these functions so that gtk knows
+    //to be thread-aware
+    if (!g_thread_supported ()){ g_thread_init(NULL); }
+    gdk_threads_init();
+    gdk_threads_enter();
+
 	gtk_init(&argc, &argv);
 	initUI();
+
+	gdk_threads_leave();
 
     return EXIT_SUCCESS;
 }
