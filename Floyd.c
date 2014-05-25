@@ -15,7 +15,7 @@ void llenarMatriz(){
 	int i, j;
 	for (i=0; i<N; i++){
 		for (j=0; j<N; j++){
-			Threadville[i][j] = -1;
+			Threadville[i][j] = 9999999;
 		}
 	}
 	for (i=0; i<N; i++){
@@ -27,9 +27,8 @@ void llenarMatriz(){
 				i == 179 || i == 191 || i == 203 || i == 215 || i == 227 || i == 239 ||
 				i == 257 || i == 269 || i == 281 || i == 293 || i == 305 || i == 245 ||
 				i == 251 || i == 263 || i == 275 || i == 287 || i == 299 || i == 311 ||
-				i == 678 || i == 698 || i == 693 || i == 713 || i == 684 || i == 704 ||
 				i == 520 || i == 561 || i == 602 || i == 643 || i == 649 || i == 655 ||
-				i == 661 || i == 667 || i == 673 ){
+				i == 661 || i == 667 || i == 673 || i == 693 || i == 713){
 					Threadville[173][0] = 1;
 					Threadville[185][28] = 1;
 					Threadville[197][56] = 1;
@@ -58,12 +57,6 @@ void llenarMatriz(){
 					Threadville[561][701] = 1;
 					Threadville[602][681] = 1;
 					Threadville[643][681] = 1;
-					Threadville[684][168] = 1;
-					Threadville[704][306] = 1;
-					Threadville[678][480] = 1;
-					Threadville[698][562] = 1;
-					Threadville[678][521] = 1;
-					Threadville[698][603] = 1;
 					Threadville[693][674] = 1;
 					Threadville[713][694] = 1;
 					Threadville[649][246] = 1;
@@ -80,7 +73,8 @@ void llenarMatriz(){
 					i == 340 || i == 368 || i == 396 || i == 424 || i == 452)
 					Threadville[i][i-7] = 1;
 				if (i == 21 || i == 49 || i == 77 || i == 105 || i == 133 || i == 161 ||
-					i == 319 || i == 347 || i == 375 || i == 403 || i == 431 || i == 459){
+					i == 319 || i == 347 || i == 375 || i == 403 || i == 431 || i == 459 ||
+					i == 678 || i == 698 || i == 684 || i == 704){
 						Threadville[21][174] = 1;
 						Threadville[49][186] = 1;
 						Threadville[77][198] = 1;
@@ -93,6 +87,12 @@ void llenarMatriz(){
 						Threadville[403][276] = 1;
 						Threadville[431][288] = 1;
 						Threadville[459][300] = 1;
+						Threadville[684][168] = 1;
+						Threadville[704][306] = 1;
+						Threadville[678][480] = 1;
+						Threadville[698][562] = 1;
+						Threadville[678][521] = 1;
+						Threadville[698][603] = 1;
 					}
 				Threadville[644][180] = 1;
 				Threadville[650][192] = 1;
@@ -128,10 +128,10 @@ void escribirArchivo(){
 	int i , j;
 	for (i=0; i<N; i++){
 		for (j=0; j<N; j++){
-			if (Threadville[i][j] < 0)
-				fprintf(f, "_ \t");
+			if (Threadville[i][j] == 9999999)
+				fprintf(f, "_\t");
 			else
-				fprintf(f, "%d \t", Threadville[i][j]);
+				fprintf(f, "%d\t", Threadville[i][j]);
 		}
 		fprintf(f, "\n");
 	}
@@ -140,7 +140,7 @@ void escribirArchivo(){
 
 int main(int argc, char* argv){
 	llenarMatriz();
-	//Floyd();
+	Floyd();
 	escribirArchivo();
 	return 0;
 }
