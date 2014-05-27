@@ -40,7 +40,7 @@ void llenarMatriz(){
 					Threadville[281][661] = 1; Sucesores[281][661] = 661;
 					Threadville[293][667] = 1; Sucesores[293][667] = 667;
 					Threadville[305][673] = 1; Sucesores[305][673] = 673;
-					Threadville[245][674] = 1; Sucesores[245][674] = 674;
+					Threadville[245][666] = 1; Sucesores[245][666] = 666;
 					Threadville[251][326] = 1; Sucesores[251][326] = 326;
 					Threadville[263][354] = 1; Sucesores[263][354] = 354;
 					Threadville[275][382] = 1; Sucesores[275][382] = 382;
@@ -60,8 +60,8 @@ void llenarMatriz(){
 					Threadville[673][294] = 1; Sucesores[673][294] = 294;
 			}
 			else{
-				if (i == 14 || i == 42 || i == 70 || i == 98 || i == 126 || i == 154 ||
-					i == 326 || i == 354 || i == 382 || i == 410 || i == 438 || i == 466){
+				if (i == 14 || i == 42 || i == 70 || i == 98 || i == 126 ||
+					i == 326 || i == 354 || i == 382 || i == 410 || i == 438){
 					Threadville[i][i+21] = 1; Sucesores[i][i+21] = i+21;
 				}
 				if (i == 28 || i == 56 || i == 84 || i == 112 || i == 140 ||
@@ -70,7 +70,7 @@ void llenarMatriz(){
 				}
 				if (i == 21 || i == 49 || i == 77 || i == 105 || i == 133 || i == 161 ||
 					i == 319 || i == 347 || i == 375 || i == 403 || i == 431 || i == 459 ||
-					i == 678 || i == 698 || i == 684 || i == 704){
+					i == 678 || i == 698 || i == 681 || i == 707){
 						Threadville[21][174] = 1; Sucesores[21][174] = 174;
 						Threadville[49][186] = 1; Sucesores[49][186] = 186;
 						Threadville[77][198] = 1; Sucesores[77][198] = 198;
@@ -83,8 +83,8 @@ void llenarMatriz(){
 						Threadville[403][276] = 1; Sucesores[403][276] = 276;
 						Threadville[431][288] = 1; Sucesores[431][288] = 288;
 						Threadville[459][300] = 1; Sucesores[459][300] = 300;
-						Threadville[684][168] = 1; Sucesores[684][168] = 168;
-						Threadville[704][306] = 1; Sucesores[704][306] = 306;
+						Threadville[681][168] = 1; Sucesores[681][168] = 168;
+						Threadville[707][306] = 1; Sucesores[707][306] = 306;
 						Threadville[678][480] = 1; Sucesores[678][480] = 480;
 						Threadville[698][562] = 1; Sucesores[698][562] = 562;
 						Threadville[678][521] = 1; Sucesores[678][521] = 521;
@@ -138,31 +138,45 @@ void escribirArchivo(){
 	fclose(f);
 }
 
-void ruta(int i, int j){
-	char e[3];
-	if (Sucesores[i][j] == -1){
-		printf("no ruta");
-	}
-	etiquetar(e, i);
-	printf("%s\t", e);
-	while (i != j){
-		i = Sucesores[i][j];
-		etiquetar(e, i);
-		printf("%s\t", e);
+void hacerRuta(automovil* carro){
+	int i;
+	i = carro->destino[0];
+	carro->viaje = NULL;
+	carro->posicion = (ruta *) malloc(sizeof(ruta));
+	carro->posicion->nodo = i;
+	carro->posicion->sig = carro->viaje;
+	carro->viaje = carro->posicion;
+	while (i != carro->destino[1]){
+		carro->posicion = (ruta *) malloc(sizeof(ruta));
+		carro->posicion->nodo = i  = Sucesores[i][carro->destino[1]];
+		carro->posicion->sig = carro->viaje;
+		carro->viaje = carro->posicion;
 	}
 }
 
 int main(int argc, char* argv){
+	printf("inicio llenarMatriz\n");
 	llenarMatriz();
+	printf("fin llenarMatriz\n");
+	printf("inicio Floyd\n");
 	Floyd();
-	escribirArchivo();
-	int i;
-	//char e[3];
-	ruta(674, 306);
-	//for (i=0; i<N; i++){
-	//	etiquetar(e, i);
-	//	printf("%s ", e);
-	//}
+	printf("fin Floyd\n");
+	automovil* a;
+	a = (automovil *) malloc(sizeof(automovil));
+	a->destino[0] = 455;
+	a->destino[1] = 0;
+	printf("inicio hacerRuta\n");
+	hacerRuta(a);
+	printf("fin hacerRuta\n");
+	ruta* curr;
+	curr = a->viaje;
+	char e[3];
+	printf("inicio print\n");
+	while(curr){
+		etiquetar(e, curr->nodo);
+		printf("%s\t", e);
+		curr = curr->sig;
+	}
 	printf("\n");
 	return 0;
 }
