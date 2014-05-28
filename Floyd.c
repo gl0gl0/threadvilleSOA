@@ -3,6 +3,8 @@
 int Threadville[N][N];
 int Sucesores[N][N];
 
+automovil* autos[4];
+
 void llenarMatriz(){
 	int i, j;
 	for (i=0; i<N; i++){
@@ -34,13 +36,13 @@ void llenarMatriz(){
 					Threadville[203][656] = 1; Sucesores[203][656] = 656;
 					Threadville[215][662] = 1; Sucesores[215][662] = 662;
 					Threadville[227][668] = 1; Sucesores[227][668] = 668;
-					Threadville[239][694] = 1; Sucesores[239][694] = 694;
+					Threadville[239][696] = 1; Sucesores[239][696] = 696;
 					Threadville[257][649] = 1; Sucesores[257][649] = 649;
 					Threadville[269][655] = 1; Sucesores[269][655] = 655;
 					Threadville[281][661] = 1; Sucesores[281][661] = 661;
 					Threadville[293][667] = 1; Sucesores[293][667] = 667;
 					Threadville[305][673] = 1; Sucesores[305][673] = 673;
-					Threadville[245][666] = 1; Sucesores[245][666] = 666;
+					Threadville[245][676] = 1; Sucesores[245][676] = 676;
 					Threadville[251][326] = 1; Sucesores[251][326] = 326;
 					Threadville[263][354] = 1; Sucesores[263][354] = 354;
 					Threadville[275][382] = 1; Sucesores[275][382] = 382;
@@ -48,9 +50,9 @@ void llenarMatriz(){
 					Threadville[299][438] = 1; Sucesores[299][438] = 438;
 					Threadville[311][466] = 1; Sucesores[311][466] = 466;
 					Threadville[520][701] = 1; Sucesores[520][701] = 701;
-					Threadville[561][701] = 1; Sucesores[561][701] = 701;
-					Threadville[602][681] = 1; Sucesores[602][681] = 681;
-					Threadville[643][681] = 1; Sucesores[643][681] = 681;
+					Threadville[561][700] = 1; Sucesores[561][700] = 700;
+					Threadville[602][679] = 1; Sucesores[602][679] = 679;
+					Threadville[643][680] = 1; Sucesores[643][680] = 680;
 					Threadville[693][674] = 1; Sucesores[693][674] = 674;
 					Threadville[713][694] = 1; Sucesores[713][694] = 694;
 					Threadville[649][246] = 1; Sucesores[649][246] = 246;
@@ -70,7 +72,7 @@ void llenarMatriz(){
 				}
 				if (i == 21 || i == 49 || i == 77 || i == 105 || i == 133 || i == 161 ||
 					i == 319 || i == 347 || i == 375 || i == 403 || i == 431 || i == 459 ||
-					i == 678 || i == 698 || i == 681 || i == 707){
+					i == 678 || i == 698 || i == 681 || i == 702){
 						Threadville[21][174] = 1; Sucesores[21][174] = 174;
 						Threadville[49][186] = 1; Sucesores[49][186] = 186;
 						Threadville[77][198] = 1; Sucesores[77][198] = 198;
@@ -84,7 +86,7 @@ void llenarMatriz(){
 						Threadville[431][288] = 1; Sucesores[431][288] = 288;
 						Threadville[459][300] = 1; Sucesores[459][300] = 300;
 						Threadville[681][168] = 1; Sucesores[681][168] = 168;
-						Threadville[707][306] = 1; Sucesores[707][306] = 306;
+						Threadville[702][306] = 1; Sucesores[702][306] = 306;
 						Threadville[678][480] = 1; Sucesores[678][480] = 480;
 						Threadville[698][562] = 1; Sucesores[698][562] = 562;
 						Threadville[678][521] = 1; Sucesores[678][521] = 521;
@@ -138,20 +140,35 @@ void escribirArchivo(){
 	fclose(f);
 }
 
-void hacerRuta(automovil* carro){
-	int i;
-	i = carro->destino[0];
-	carro->viaje = NULL;
-	carro->posicion = (ruta *) malloc(sizeof(ruta));
-	carro->posicion->nodo = i;
-	carro->posicion->sig = carro->viaje;
-	carro->viaje = carro->posicion;
-	while (i != carro->destino[1]){
-		carro->posicion = (ruta *) malloc(sizeof(ruta));
-		carro->posicion->nodo = i  = Sucesores[i][carro->destino[1]];
-		carro->posicion->sig = carro->viaje;
-		carro->viaje = carro->posicion;
+void avanzar(automovil* a){
+	a->posicion = Sucesores[a->posicion][a->destino[1]];
+}
+
+void loop(void* carro){
+	char e[3];
+	automovil* a;
+	a = (automovil*) carro;
+	etiquetar(e, a->posicion);
+	printf("%d_%s\t", a->destino[0], e);
+	while (a->posicion != a->destino[1]){
+		avanzar(a);
+		etiquetar(e, a->posicion);
+		printf("%d_%s\t", a->destino[0], e);
 	}
+}
+
+void generarCarro(automovil* a){
+	int r;
+	r = rand() % 714;
+	a->posicion = a->destino[0] = r;
+	r = rand() % 714;
+	a->destino[1] = r;
+	char e[3], f[3];
+	etiquetar(e, a->destino[0]);
+	etiquetar(f, a->destino[1]);
+	printf("!!!%d(%s)- %d(%s)\n", a->destino[0],  e, a->destino[1], f);
+	pthread_create(&a->hilo, NULL, loop, (void *) a);
+	pthread_join(a->hilo, NULL);
 }
 
 int main(int argc, char* argv){
@@ -161,22 +178,15 @@ int main(int argc, char* argv){
 	printf("inicio Floyd\n");
 	Floyd();
 	printf("fin Floyd\n");
-	automovil* a;
-	a = (automovil *) malloc(sizeof(automovil));
-	a->destino[0] = 455;
-	a->destino[1] = 0;
-	printf("inicio hacerRuta\n");
-	hacerRuta(a);
-	printf("fin hacerRuta\n");
-	ruta* curr;
-	curr = a->viaje;
-	char e[3];
-	printf("inicio print\n");
-	while(curr){
-		etiquetar(e, curr->nodo);
-		printf("%s\t", e);
-		curr = curr->sig;
+	
+	
+	int i;
+	srand(time(NULL));
+	for (i=0; i<4; i++){
+		autos[i] = (automovil *) malloc(sizeof(automovil));
+		generarCarro(autos[i]);
 	}
+
 	printf("\n");
 	return 0;
 }

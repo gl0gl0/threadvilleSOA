@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
+#include <time.h>
 
 #ifndef min
 	#define min( a, b ) ( ((a) < (b)) ? (a) : (b) )
@@ -13,15 +15,14 @@ struct ruta{
 } typedef ruta; 
 
 struct automovil{
+	pthread_t hilo;
 	int viajes;
 	//destinos
 	int destino[2];
-	ruta* viaje;
-	ruta* posicion;
-	int velocidad;
-	//color
+	int posicion;
+	int color;
 } typedef automovil;
 
 void etiquetar(char*, int);
 
-void hacerRuta(automovil*);
+void avanzar(automovil*);
