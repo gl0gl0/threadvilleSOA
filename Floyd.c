@@ -214,9 +214,9 @@ void loop(void* carro){
 void generarCarro(automovil* a){
 	int r;
 	r = rand() % 714;
-	a->posicion = a->destino[0] = 109;
+	a->posicion = a->destino[0] = r;
 	r = rand() % 714;
-	a->destino[1] = 539;
+	a->destino[1] = r;
 	char e[3], f[3];
 	etiquetar(e, a->destino[0]);
 	etiquetar(f, a->destino[1]);

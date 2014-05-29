@@ -20,13 +20,12 @@ gint unit = 20;
 struct readThreadParams
 {
 	 GdkRectangle car;
-};
+} typedef readThreadParams;
 
 
 //do_draw will be executed in a separate thread whenever we would like to update
 //our animation
 void *do_draw(void *ptr){
-	printf("Do draw\n");
     //currently_drawing = 1;
 
     //When dealing with gdkPixmap's, we need to make sure not to
@@ -34,6 +33,7 @@ void *do_draw(void *ptr){
     gdk_threads_enter();
     struct readThreadParams *readParams = ptr;
     GdkRectangle car = readParams->car;
+    printf("Do draw %d\n", readParams->car.y);
 	gdk_draw_rectangle(this.pixMap, this.drawingArea->style->white_gc, TRUE, car.x, car.y, car.width, car.height);
     gdk_threads_leave();
 
@@ -299,12 +299,13 @@ void initUI () {
     {
     	printf("Pthread\n");
 	    pthread_t hThread;
-	   	struct readThreadParams readParams;
-	    readParams.car.x = border_width+5;
-	    readParams.car.y = y;
-	    readParams.car.width = 10;
-		readParams.car.height = 15;
-	    int iret = pthread_create (&hThread, NULL, do_draw, &readParams);
+	   	readThreadParams* readParams;
+	   	readParams = (readThreadParams*) malloc(sizeof(readThreadParams));
+	    readParams->car.x = border_width+5;
+	    readParams->car.y = y;
+	    readParams->car.width = 10;
+		readParams->car.height = 15;
+	    int iret = pthread_create (&hThread, NULL, do_draw, readParams);
 	    if (iret) {
 	    	pthread_join(hThread, NULL);
 	    }
