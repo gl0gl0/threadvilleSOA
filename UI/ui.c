@@ -33,7 +33,7 @@ void *do_draw(void *ptr){
     gdk_threads_enter();
     struct readThreadParams *readParams = ptr;
     GdkRectangle car = readParams->car;
-    printf("Do draw %d\n", readParams->car.y);
+    printf("Do draw %d\n", car.y);
 	gdk_draw_rectangle(this.pixMap, this.drawingArea->style->white_gc, TRUE, car.x, car.y, car.width, car.height);
     gdk_threads_leave();
 
@@ -42,6 +42,18 @@ void *do_draw(void *ptr){
     return NULL;
 }
 
+void *loopThreads(void *ptr){
+	readThreadParams *readParams = ptr;
+	
+    GdkRectangle car = readParams->car;
+	while(1){
+		sleep(1);
+		readParams->car.x--;
+	readParams->car.y++;
+		
+		do_draw(readParams);
+	}
+}
 
 /* drawCar
  * Draws a car
@@ -183,7 +195,7 @@ void gtk_expose_event (GtkWidget *widget, GdkEventExpose *event) {
 			event->area.x, event->area.y,
 			event->area.width, event->area.height);
 
-	//drawThreadville(widget);
+	drawThreadville(widget);
 }
 
 void gtk_configure_event (GtkWidget *widget, GdkEventConfigure *event) {
@@ -294,6 +306,7 @@ void initUI () {
     (void)g_timeout_add(100, (GSourceFunc)loop, this.drawingArea);
 
     gint y = 220;
+    gint x =  border_width+5;
     int i = 0;
     for (i; i < 5; ++i)
     {
@@ -301,15 +314,16 @@ void initUI () {
 	    pthread_t hThread;
 	   	readThreadParams* readParams;
 	   	readParams = (readThreadParams*) malloc(sizeof(readThreadParams));
-	    readParams->car.x = border_width+5;
+	    readParams->car.x = x;
 	    readParams->car.y = y;
 	    readParams->car.width = 10;
 		readParams->car.height = 15;
-	    int iret = pthread_create (&hThread, NULL, do_draw, readParams);
+	    int iret = pthread_create (&hThread, NULL, loopThreads, readParams);
 	    if (iret) {
 	    	pthread_join(hThread, NULL);
 	    }
 	    y = y - 20;
+	    x = x + 15;
     }
 
     gtk_main();
