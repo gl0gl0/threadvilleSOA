@@ -17,22 +17,27 @@ gint canvas_height = 680;
 
 gint unit = 20;
 
+struct readThreadParams
+{
+	 GdkRectangle car;
+};
 
-GdkRectangle car;
 
 //do_draw will be executed in a separate thread whenever we would like to update
 //our animation
 void *do_draw(void *ptr){
-    currently_drawing = 1;
+	printf("Do draw\n");
+    //currently_drawing = 1;
 
     //When dealing with gdkPixmap's, we need to make sure not to
     //access them from outside gtk_main().
     gdk_threads_enter();
-	car.y = car.y - 20;
+    struct readThreadParams *readParams = ptr;
+    GdkRectangle car = readParams->car;
 	gdk_draw_rectangle(this.pixMap, this.drawingArea->style->white_gc, TRUE, car.x, car.y, car.width, car.height);
     gdk_threads_leave();
 
-    currently_drawing = 0;
+    //currently_drawing = 0;
 
     return NULL;
 }
@@ -178,7 +183,7 @@ void gtk_expose_event (GtkWidget *widget, GdkEventExpose *event) {
 			event->area.x, event->area.y,
 			event->area.width, event->area.height);
 
-	drawThreadville(widget);
+	//drawThreadville(widget);
 }
 
 void gtk_configure_event (GtkWidget *widget, GdkEventConfigure *event) {
@@ -186,6 +191,7 @@ void gtk_configure_event (GtkWidget *widget, GdkEventConfigure *event) {
 		g_object_unref(this.pixMap);
 
 	this.pixMap = gdk_pixmap_new(widget->window, widget->allocation.width, widget->allocation.height, -1);
+	drawThreadville(widget);
 }
 
 
@@ -232,28 +238,29 @@ void createWindow () {
 }
 
 gboolean loop (GtkWidget *window) {
-	static gboolean first_execution = TRUE;
+	 printf("Loop\n");
+	//static gboolean first_execution = TRUE;
 
 	// use a safe function to get the value of currently_drawing
-    int drawing_status = g_atomic_int_get(&currently_drawing);
+    //int drawing_status = g_atomic_int_get(&currently_drawing);
 
     //if we are not currently drawing anything, launch a thread to 
     //update our pixmap
-    if(drawing_status == 0){
+    /*if(drawing_status == 0){
         static pthread_t thread_info;
         int  iret;
         if(first_execution != TRUE){
             pthread_join(thread_info, NULL);
         }
         iret = pthread_create( &thread_info, NULL, do_draw, NULL);
-    }
+    }*/
 
     //tell our drawing area it is time to draw our animation.
     int width, height;
     gdk_drawable_get_size(this.pixMap, &width, &height);
     gtk_widget_queue_draw_area(this.drawingArea, 0, 0, width, height);
 
-    first_execution = FALSE;
+    //first_execution = FALSE;
 
     return TRUE;
 
@@ -276,11 +283,6 @@ void display () {
  * @return void
  */
 void initUI () {
-	car.x = 85;
-	car.y = 200;
-	car.width = 10;
-	car.height = 15;
-
 	createWindow ();
 	createDrawingArea();
     display();
@@ -290,6 +292,24 @@ void initUI () {
     gtk_widget_set_double_buffered(this.drawingArea, FALSE);
 
     (void)g_timeout_add(100, (GSourceFunc)loop, this.drawingArea);
+
+    gint y = 220;
+    int i = 0;
+    for (i; i < 5; ++i)
+    {
+    	printf("Pthread\n");
+	    pthread_t hThread;
+	   	struct readThreadParams readParams;
+	    readParams.car.x = border_width+5;
+	    readParams.car.y = y;
+	    readParams.car.width = 10;
+		readParams.car.height = 15;
+	    int iret = pthread_create (&hThread, NULL, do_draw, &readParams);
+	    if (iret) {
+	    	pthread_join(hThread, NULL);
+	    }
+	    y = y - 20;
+    }
 
     gtk_main();
 
@@ -301,4 +321,11 @@ void initUI () {
     sleep(2);
     drawCar(border_width+5, 140);
     sleep(2);*/
+    //struct readThreadParams readParams2;
+    //readParams2.car.x = border_width+5;
+    //readParams2.car.y = 140;
+    //readParams2.car.width = 10;
+	//readParams2.car.height = 15;
+    //pthread_t hThread2;
+    //pthread_create (&hThread2, NULL, loop, &readParams2);
 }
