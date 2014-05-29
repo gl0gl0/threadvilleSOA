@@ -104,6 +104,7 @@ void llenarMatriz(){
 				(i >= 669 && i <= 673) ){
 					Threadville[i][i-1] = 1; Sucesores[i][i-1] = i-1;
 				}
+				
 	}
 }
 
@@ -140,9 +141,62 @@ void escribirArchivo(){
 	fclose(f);
 }
 
+int anterior;
+int sentido_puente;
+
 void avanzar(automovil* a){
+	if (anterior == 185 || anterior == 197 || anterior == 209 || anterior == 221 || anterior == 233)
+		if (Sucesores[Sucesores[a->posicion][a->destino[1]]][a->destino[1]]+11 == anterior){
+			a->posicion++;
+			return;
+		}
+	if (anterior == 251 || anterior == 263 || anterior == 275 || anterior == 287 || anterior == 299)
+		if (Sucesores[Sucesores[a->posicion][a->destino[1]]][a->destino[1]]-1 == anterior){
+			a->posicion++;
+			return;
+		}
+	if (anterior == 179 || anterior == 191 || anterior == 203 || anterior == 215 || anterior == 227)
+		if (a->posicion == 644 || a->posicion == 650 || a->posicion == 656 || a->posicion == 662 || a->posicion == 668){
+			sentido_puente = 1;
+			a->posicion++;
+			return;
+		}
+	if (anterior == 257 || anterior == 269 || anterior == 281 || anterior == 293 || anterior == 305)
+		if (a->posicion == 649 || a->posicion == 655 || a->posicion == 661 || a->posicion == 667 || a->posicion == 673){
+			sentido_puente = -1;
+			a->posicion--;
+			return;
+		}
+	if (sentido_puente == 1){
+		switch(a->posicion){
+			case 649: a->posicion = 246; return;
+			case 655: a->posicion = 258; return;
+			case 661: a->posicion = 270; return;
+			case 667: a->posicion = 282; return;
+			case 673: a->posicion = 294; return;
+		}
+	}
+	
+	if (sentido_puente == -1){
+		switch(a->posicion){
+			case 644: a->posicion = 180; return;
+			case 650: a->posicion = 192; return;
+			case 656: a->posicion = 204; return;
+			case 662: a->posicion = 216; return;
+			case 668: a->posicion = 228; return;
+		}
+	}
+	if ((a->posicion >= 645 && a->posicion <= 648) || (a->posicion >= 651 && a->posicion <= 654) ||
+	(a->posicion >= 657 && a->posicion <= 660) || (a->posicion >= 663 && a->posicion <= 666) ||
+	(a->posicion >= 669 && a->posicion <= 672) ){
+		a->posicion += sentido_puente;
+		return;
+	}
+	anterior = a->posicion;
 	a->posicion = Sucesores[a->posicion][a->destino[1]];
 }
+
+
 
 void loop(void* carro){
 	char e[3];
@@ -160,9 +214,9 @@ void loop(void* carro){
 void generarCarro(automovil* a){
 	int r;
 	r = rand() % 714;
-	a->posicion = a->destino[0] = r;
+	a->posicion = a->destino[0] = 109;
 	r = rand() % 714;
-	a->destino[1] = r;
+	a->destino[1] = 539;
 	char e[3], f[3];
 	etiquetar(e, a->destino[0]);
 	etiquetar(f, a->destino[1]);
@@ -178,11 +232,10 @@ int main(int argc, char* argv){
 	printf("inicio Floyd\n");
 	Floyd();
 	printf("fin Floyd\n");
-	
-	
+	sentido_puente = 1;
 	int i;
 	srand(time(NULL));
-	for (i=0; i<4; i++){
+	for (i=0; i<1; i++){
 		autos[i] = (automovil *) malloc(sizeof(automovil));
 		generarCarro(autos[i]);
 	}
