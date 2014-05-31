@@ -3,6 +3,7 @@
 
 typedef struct _uivars {
 	GtkWidget *mainWindow;
+	GtkWidget *vbox;
 	GtkWidget *drawingArea;
 	GdkPixmap *pixMap;
 } uivars;

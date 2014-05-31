@@ -10,7 +10,7 @@
 static int currently_drawing = 0;
 
 gint window_width = 1120;
-gint window_height = 680;
+gint window_height = 800;
 gint border_width = 80;
 gint canvas_width = 960;
 gint canvas_height = 680;
@@ -22,54 +22,36 @@ struct readThreadParams
 	 GdkRectangle car;
 } typedef readThreadParams;
 
+/* drawCar
+ * Draws a car
+ *
+ * @return void
+ */
+void drawCar (gint x, gint y, gint width, gint height) {
+	GdkRectangle car;
+
+	car.x = x;
+	car.y = y;
+	car.width = width;
+	car.height = height;
+	gdk_draw_rectangle(this.pixMap, this.drawingArea->style->white_gc, TRUE, car.x, car.y, car.width, car.height);
+
+	gtk_widget_queue_draw_area(this.drawingArea, car.x, car.y, car.width, car.height);
+}
 
 //do_draw will be executed in a separate thread whenever we would like to update
 //our animation
 void *do_draw(void *ptr){
-    //currently_drawing = 1;
 
     //When dealing with gdkPixmap's, we need to make sure not to
     //access them from outside gtk_main().
     gdk_threads_enter();
     struct readThreadParams *readParams = ptr;
     GdkRectangle car = readParams->car;
-    printf("Do draw %d\n", car.y);
-	gdk_draw_rectangle(this.pixMap, this.drawingArea->style->white_gc, TRUE, car.x, car.y, car.width, car.height);
+	drawCar(car.x, car.y, car.width, car.height);
     gdk_threads_leave();
 
-    //currently_drawing = 0;
-
     return NULL;
-}
-
-void *loopThreads(void *ptr){
-	readThreadParams *readParams = ptr;
-	
-    GdkRectangle car = readParams->car;
-	while(1){
-		sleep(1);
-		readParams->car.x--;
-	readParams->car.y++;
-		
-		do_draw(readParams);
-	}
-}
-
-/* drawCar
- * Draws a car
- *
- * @return void
- */
-void drawCar (gint x, gint y) {
-	GdkRectangle car;
-
-	car.x = x;
-	car.y = y;
-	car.width = 10;
-	car.height = 15;
-	gdk_draw_rectangle(this.pixMap, this.drawingArea->style->white_gc, TRUE, car.x, car.y, car.width, car.height);
-
-	gtk_widget_queue_draw_area(this.drawingArea, car.x, car.y, car.width, car.height);
 }
 
 /* drawBlock
@@ -222,7 +204,7 @@ void createDrawingArea () {
 
 	// Creates drawing area with the specified dimensions and background color
 	this.drawingArea = gtk_drawing_area_new();
-	gtk_drawing_area_size((GtkDrawingArea*) this.drawingArea, window_width, window_height);
+	gtk_drawing_area_size((GtkDrawingArea*) this.drawingArea, canvas_width, canvas_height);
 	gtk_widget_modify_bg((GtkWidget*) this.drawingArea, GTK_STATE_NORMAL, &color);
 	gdk_color_parse("yellow", &color);
 	gtk_widget_modify_fg((GtkWidget*) this.drawingArea, GTK_STATE_NORMAL, &color);
@@ -231,7 +213,7 @@ void createDrawingArea () {
 	gtk_signal_connect((GtkObject*) this.drawingArea, "expose_event", G_CALLBACK(gtk_expose_event), NULL);
 	gtk_signal_connect((GtkObject*) this.drawingArea, "configure_event", G_CALLBACK(gtk_configure_event), NULL);
 
-	gtk_container_add((GtkContainer*) this.mainWindow, this.drawingArea);
+	gtk_container_add((GtkContainer*) this.vbox, this.drawingArea);
 }
 
 /* createWindow
@@ -245,34 +227,114 @@ void createWindow () {
 	gtk_window_set_title((GtkWindow*) this.mainWindow, "Threadville");
 	gtk_window_set_position((GtkWindow*) this.mainWindow, GTK_WIN_POS_CENTER_ALWAYS);
 
+	/* Principal vbox */
+	this.vbox = gtk_vbox_new(FALSE, 10);
+	GtkWidget *valign = gtk_alignment_new(0, 1, 0, 0);
+	gtk_container_add((GtkContainer*) this.vbox, valign);
+	gtk_container_add((GtkContainer*) this.mainWindow, this.vbox);
+
+	/* Parameters Frame */
+	GtkWidget *parametersFrame = gtk_frame_new("Parámetros de Ejecucion");
+	gtk_frame_set_shadow_type((GtkFrame*) parametersFrame, GTK_SHADOW_ETCHED_IN);
+	GtkWidget *parametersTable = gtk_table_new(3, 8, FALSE);
+	gtk_table_set_row_spacings((GtkTable*) parametersTable, 5);
+	gtk_table_set_col_spacings((GtkTable*) parametersTable, 5);
+	
+	//Generate car
+	GtkWidget *generateCarBtn = gtk_button_new_with_label("Generar carro");
+	gtk_table_attach_defaults((GtkTable*) parametersTable, generateCarBtn, 0,1,0,1);
+	GtkWidget *carXInput = gtk_entry_new();
+	gtk_entry_set_text((GtkEntry*) carXInput, "x");
+	gtk_table_attach_defaults((GtkTable*) parametersTable, carXInput, 1,2,0,1);
+	GtkWidget *carYInput = gtk_entry_new();
+	gtk_entry_set_text((GtkEntry*) carYInput, "y");
+	gtk_table_attach_defaults((GtkTable*) parametersTable, carYInput, 2,3,0,1);
+	GtkWidget *carModeCheck = gtk_check_button_new_with_label("auto");
+	gtk_table_attach_defaults((GtkTable*) parametersTable, carModeCheck, 3,4,0,1);
+	gtk_toggle_button_set_active((GtkToggleButton*) carModeCheck, TRUE);
+
+	// Generate Ambulance
+	GtkWidget *generateAmbulanceBtn = gtk_button_new_with_label("Generar Ambulancia");
+	gtk_table_attach_defaults((GtkTable*) parametersTable, generateAmbulanceBtn, 4,5,0,1);
+	GtkWidget *ambulanceXInput = gtk_entry_new();
+	gtk_entry_set_text((GtkEntry*) ambulanceXInput, "x");
+	gtk_table_attach_defaults((GtkTable*) parametersTable, ambulanceXInput, 5,6,0,1);
+	GtkWidget *ambulanceYInput = gtk_entry_new();
+	gtk_entry_set_text((GtkEntry*) ambulanceYInput, "y");
+	gtk_table_attach_defaults((GtkTable*) parametersTable, ambulanceYInput, 6,7,0,1);
+	GtkWidget *ambulanceModeCheck = gtk_check_button_new_with_label("auto");
+	gtk_table_attach_defaults((GtkTable*) parametersTable, ambulanceModeCheck, 7,8,0,1);
+	gtk_toggle_button_set_active((GtkToggleButton*) ambulanceModeCheck, TRUE);
+
+	// Buses
+	GtkWidget *redBusModeCheck = gtk_check_button_new_with_label("Bus Rojo");
+	gtk_table_attach_defaults((GtkTable*) parametersTable, redBusModeCheck, 0,1,1,2);
+	gtk_toggle_button_set_active((GtkToggleButton*) redBusModeCheck, TRUE);
+	GtkWidget *greenBusModeCheck = gtk_check_button_new_with_label("Bus Verde");
+	gtk_table_attach_defaults((GtkTable*) parametersTable, greenBusModeCheck, 1,2,1,2);
+	gtk_toggle_button_set_active((GtkToggleButton*) greenBusModeCheck, TRUE);
+	GtkWidget *blueBusModeCheck = gtk_check_button_new_with_label("Bus Azul");
+	gtk_table_attach_defaults((GtkTable*) parametersTable, blueBusModeCheck, 2,3,1,2);
+	gtk_toggle_button_set_active((GtkToggleButton*) blueBusModeCheck, TRUE);
+	GtkWidget *whiteBusModeCheck = gtk_check_button_new_with_label("Bus Blanco");
+	gtk_table_attach_defaults((GtkTable*) parametersTable, whiteBusModeCheck, 3,4,1,2);
+	gtk_toggle_button_set_active((GtkToggleButton*) whiteBusModeCheck, TRUE);
+	GtkWidget *grayBusModeCheck = gtk_check_button_new_with_label("Bus Gris");
+	gtk_table_attach_defaults((GtkTable*) parametersTable, grayBusModeCheck, 4,5,1,2);
+	gtk_toggle_button_set_active((GtkToggleButton*) grayBusModeCheck, TRUE);
+	GtkWidget *blackBusModeCheck = gtk_check_button_new_with_label("Bus Negro");
+	gtk_table_attach_defaults((GtkTable*) parametersTable, blackBusModeCheck, 5,6,1,2);
+	gtk_toggle_button_set_active((GtkToggleButton*) blackBusModeCheck, TRUE);
+	GtkWidget *lightBlueBusModeCheck = gtk_check_button_new_with_label("Bus Celeste");
+	gtk_table_attach_defaults((GtkTable*) parametersTable, lightBlueBusModeCheck, 6,7,1,2);
+	gtk_toggle_button_set_active((GtkToggleButton*) lightBlueBusModeCheck, TRUE);
+	GtkWidget *pinkBusModeCheck = gtk_check_button_new_with_label("Bus Rosa");
+	gtk_table_attach_defaults((GtkTable*) parametersTable, pinkBusModeCheck, 7,8,1,2);
+	gtk_toggle_button_set_active((GtkToggleButton*) pinkBusModeCheck, TRUE);
+
+	GtkWidget *orangeBusModeCheck = gtk_check_button_new_with_label("Bus Naranja");
+	gtk_table_attach_defaults((GtkTable*) parametersTable, orangeBusModeCheck, 0,1,2,3);
+	gtk_toggle_button_set_active((GtkToggleButton*) orangeBusModeCheck, TRUE);
+	GtkWidget *allBusesModeCheck = gtk_check_button_new_with_label("Todos los Buses");
+	gtk_table_attach_defaults((GtkTable*) parametersTable, allBusesModeCheck, 1,2,2,3);
+	gtk_toggle_button_set_active((GtkToggleButton*) allBusesModeCheck, TRUE);
+	GtkWidget *obstaclesModeCheck = gtk_check_button_new_with_label("Obstaculos");
+	gtk_table_attach_defaults((GtkTable*) parametersTable, obstaclesModeCheck, 2,3,2,3);
+	gtk_toggle_button_set_active((GtkToggleButton*) obstaclesModeCheck, TRUE);
+
+	// Start/Finish
+	GtkWidget *stopBtn = gtk_button_new_with_label("Terminar");
+	gtk_table_attach_defaults((GtkTable*) parametersTable, stopBtn, 6,7,2,3);
+	GtkWidget *startBtn = gtk_button_new_with_label("Simular");
+	gtk_table_attach_defaults((GtkTable*) parametersTable, startBtn, 7,8,2,3);
+	
+	gtk_container_add((GtkContainer*) parametersFrame, parametersTable);
+	gtk_box_pack_start((GtkBox*) this.vbox, parametersFrame, FALSE, FALSE, 0);
+
 	// Attach close event to the window
 	gtk_signal_connect((GtkObject*) this.mainWindow, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 }
 
+
+void *loopThreads(void *ptr){
+	readThreadParams *readParams = ptr;
+	
+    GdkRectangle car = readParams->car;
+	while(1){
+		sleep(1);
+		readParams->car.x--;
+	readParams->car.y++;
+		
+		do_draw(readParams);
+	}
+}
+
 gboolean loop (GtkWidget *window) {
 	 printf("Loop\n");
-	//static gboolean first_execution = TRUE;
 
-	// use a safe function to get the value of currently_drawing
-    //int drawing_status = g_atomic_int_get(&currently_drawing);
-
-    //if we are not currently drawing anything, launch a thread to 
-    //update our pixmap
-    /*if(drawing_status == 0){
-        static pthread_t thread_info;
-        int  iret;
-        if(first_execution != TRUE){
-            pthread_join(thread_info, NULL);
-        }
-        iret = pthread_create( &thread_info, NULL, do_draw, NULL);
-    }*/
-
-    //tell our drawing area it is time to draw our animation.
     int width, height;
     gdk_drawable_get_size(this.pixMap, &width, &height);
     gtk_widget_queue_draw_area(this.drawingArea, 0, 0, width, height);
-
-    //first_execution = FALSE;
 
     return TRUE;
 
@@ -285,7 +347,7 @@ gboolean loop (GtkWidget *window) {
  */
 void display () {
 	gtk_widget_show(this.drawingArea);
-	gtk_widget_show(this.mainWindow);
+	gtk_widget_show_all(this.mainWindow);
 }
 
 
@@ -300,7 +362,7 @@ void initUI () {
     display();
 
     //we can turn off gtk's automatic painting and double buffering routines.
-    gtk_widget_set_app_paintable(this.drawingArea, TRUE);
+    /*gtk_widget_set_app_paintable(this.drawingArea, TRUE);
     gtk_widget_set_double_buffered(this.drawingArea, FALSE);
 
     (void)g_timeout_add(100, (GSourceFunc)loop, this.drawingArea);
@@ -324,23 +386,7 @@ void initUI () {
 	    }
 	    y = y - 20;
 	    x = x + 15;
-    }
+    }*/
 
     gtk_main();
-
-    /*drawCar(border_width+5, 200);
-    sleep(2);
-    drawCar(border_width+5, 180);
-	sleep(2);
-    drawCar(border_width+5, 160);
-    sleep(2);
-    drawCar(border_width+5, 140);
-    sleep(2);*/
-    //struct readThreadParams readParams2;
-    //readParams2.car.x = border_width+5;
-    //readParams2.car.y = 140;
-    //readParams2.car.width = 10;
-	//readParams2.car.height = 15;
-    //pthread_t hThread2;
-    //pthread_create (&hThread2, NULL, loop, &readParams2);
 }
