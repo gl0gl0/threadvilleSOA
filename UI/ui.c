@@ -5,7 +5,6 @@
 #include <pthread.h>
 
 #include "ui.h"
-#include "global.h"
 
 static int currently_drawing = 0;
 
