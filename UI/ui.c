@@ -62,21 +62,65 @@ void *do_draw(void *ptr){
  	x = x + border_width;
  	gdk_draw_rectangle(this.pixMap,  widget->style->fg_gc[0], TRUE, x, y, 120, 120);
 	// Upper left
-	if (upper)
+	if (upper) {
 		gdk_draw_rectangle(this.pixMap, widget->style->white_gc, TRUE, (x+20), y, 20, 20);
+		gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-100-*-*-*-*-iso8859-1"), widget->style->black_gc, (x+28), (y+16), "1");
+	}
 	gdk_draw_rectangle(this.pixMap, widget->style->white_gc, TRUE, x, (y+20), 20, 20);
+	if (!lower) {
+		gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-100-*-*-*-*-iso8859-1"), widget->style->black_gc, (x+8), (y+36), "6");
+	} else if (!upper) {
+		gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-100-*-*-*-*-iso8859-1"), widget->style->black_gc, (x+8), (y+36), "1");
+	} else {
+		gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-100-*-*-*-*-iso8859-1"), widget->style->black_gc, (x+8), (y+36), "8");
+	}
+
 	// Lower left
 	gdk_draw_rectangle(this.pixMap, widget->style->white_gc, TRUE, x, (y+80), 20, 20);
-	if (lower)
+	if (!lower) {
+		gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-100-*-*-*-*-iso8859-1"), widget->style->black_gc, (x+8), (y+96), "5");
+	} else if (!upper) {
+		gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-100-*-*-*-*-iso8859-1"), widget->style->black_gc, (x+8), (y+96), "6");
+	} else {
+		gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-100-*-*-*-*-iso8859-1"), widget->style->black_gc, (x+8), (y+96), "7");
+	}
+
+	if (lower) {
 		gdk_draw_rectangle(this.pixMap, widget->style->white_gc, TRUE, (x+20), (y+100), 20, 20);
+		if (!upper) {
+			gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-100-*-*-*-*-iso8859-1"), widget->style->black_gc, (x+28), (y+116), "5");
+		} else {
+			gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-100-*-*-*-*-iso8859-1"), widget->style->black_gc, (x+28), (y+116), "6");
+		}
+	}
 	// Upper right
-	if (upper)
+	if (upper) {
 		gdk_draw_rectangle(this.pixMap, widget->style->white_gc, TRUE, (x+80), y, 20, 20);
+		gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-100-*-*-*-*-iso8859-1"), widget->style->black_gc, (x+88), (y+16), "2");
+	}
 	gdk_draw_rectangle(this.pixMap, widget->style->white_gc, TRUE, (x+100), (y+20), 20, 20);
+	if (!upper) {
+		gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-100-*-*-*-*-iso8859-1"), widget->style->black_gc, (x+108), (y+36), "2");
+	} else {
+		gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-100-*-*-*-*-iso8859-1"), widget->style->black_gc, (x+108), (y+36), "3");
+	}
+
 	// Lower right
 	gdk_draw_rectangle(this.pixMap, widget->style->white_gc, TRUE, (x+100), (y+80), 20, 20);
-	if (lower)
+	if (!upper) {
+		gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-100-*-*-*-*-iso8859-1"), widget->style->black_gc, (x+108), (y+96), "3");		
+	} else {
+		gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-100-*-*-*-*-iso8859-1"), widget->style->black_gc, (x+108), (y+96), "4");
+	}
+	
+	if (lower) {
 		gdk_draw_rectangle(this.pixMap, widget->style->white_gc, TRUE, (x+80), (y+100), 20, 20);
+		if (!upper) {
+			gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-100-*-*-*-*-iso8859-1"), widget->style->black_gc, (x+88), (y+116), "4");
+		} else {
+			gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-100-*-*-*-*-iso8859-1"), widget->style->black_gc, (x+88), (y+116), "5");
+		}
+	}
 
 	gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-300-*-*-*-*-iso8859-1"), widget->style->black_gc, (x+50), (y+70), string);
  }
@@ -242,12 +286,18 @@ void createWindow () {
 	//Generate car
 	GtkWidget *generateCarBtn = gtk_button_new_with_label("Generar carro");
 	gtk_table_attach_defaults((GtkTable*) parametersTable, generateCarBtn, 0,1,0,1);
-	GtkWidget *carXInput = gtk_entry_new();
-	gtk_entry_set_text((GtkEntry*) carXInput, "x");
-	gtk_table_attach_defaults((GtkTable*) parametersTable, carXInput, 1,2,0,1);
-	GtkWidget *carYInput = gtk_entry_new();
-	gtk_entry_set_text((GtkEntry*) carYInput, "y");
-	gtk_table_attach_defaults((GtkTable*) parametersTable, carYInput, 2,3,0,1);
+	GtkWidget *carPathInput = gtk_entry_new();
+	gtk_entry_set_text((GtkEntry*) carPathInput, "e.g., A1, B1, C2, C5");
+	gtk_table_attach_defaults((GtkTable*) parametersTable, carPathInput, 1,2,0,1);
+	GtkWidget *carTypeCombo = gtk_combo_box_new_text();
+	gtk_combo_box_append_text(GTK_COMBO_BOX(carTypeCombo), "Rojo");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(carTypeCombo), "Azul");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(carTypeCombo), "Verde");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(carTypeCombo), "Negro");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(carTypeCombo), "Blanco");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(carTypeCombo), "Amarillo");
+	gtk_combo_box_set_active(GTK_COMBO_BOX(carTypeCombo), 0);
+	gtk_table_attach_defaults((GtkTable*) parametersTable, carTypeCombo, 2,3,0,1);
 	GtkWidget *carModeCheck = gtk_check_button_new_with_label("auto");
 	gtk_table_attach_defaults((GtkTable*) parametersTable, carModeCheck, 3,4,0,1);
 	gtk_toggle_button_set_active((GtkToggleButton*) carModeCheck, TRUE);
@@ -255,14 +305,11 @@ void createWindow () {
 	// Generate Ambulance
 	GtkWidget *generateAmbulanceBtn = gtk_button_new_with_label("Generar Ambulancia");
 	gtk_table_attach_defaults((GtkTable*) parametersTable, generateAmbulanceBtn, 4,5,0,1);
-	GtkWidget *ambulanceXInput = gtk_entry_new();
-	gtk_entry_set_text((GtkEntry*) ambulanceXInput, "x");
-	gtk_table_attach_defaults((GtkTable*) parametersTable, ambulanceXInput, 5,6,0,1);
-	GtkWidget *ambulanceYInput = gtk_entry_new();
-	gtk_entry_set_text((GtkEntry*) ambulanceYInput, "y");
-	gtk_table_attach_defaults((GtkTable*) parametersTable, ambulanceYInput, 6,7,0,1);
+	GtkWidget *ambulancePathInput = gtk_entry_new();
+	gtk_entry_set_text((GtkEntry*) ambulancePathInput, "e.g., A1, B1, C2, C5");
+	gtk_table_attach_defaults((GtkTable*) parametersTable, ambulancePathInput, 5,6,0,1);
 	GtkWidget *ambulanceModeCheck = gtk_check_button_new_with_label("auto");
-	gtk_table_attach_defaults((GtkTable*) parametersTable, ambulanceModeCheck, 7,8,0,1);
+	gtk_table_attach_defaults((GtkTable*) parametersTable, ambulanceModeCheck, 6,7,0,1);
 	gtk_toggle_button_set_active((GtkToggleButton*) ambulanceModeCheck, TRUE);
 
 	// Buses
