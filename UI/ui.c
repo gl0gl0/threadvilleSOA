@@ -34,6 +34,7 @@ void drawCar (gint x, gint y, gint width, gint height) {
 	car.width = width;
 	car.height = height;
 	gdk_draw_rectangle(this.pixMap, this.drawingArea->style->white_gc, TRUE, car.x, car.y, car.width, car.height);
+	gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-50-*-*-*-*-iso8859-1"), this.drawingArea->style->black_gc, (car.x+2), (car.y+10), "A1/5");
 
 	gtk_widget_queue_draw_area(this.drawingArea, car.x, car.y, car.width, car.height);
 }
@@ -408,10 +409,10 @@ void initUI () {
     display();
 
     //we can turn off gtk's automatic painting and double buffering routines.
-    /*gtk_widget_set_app_paintable(this.drawingArea, TRUE);
+    gtk_widget_set_app_paintable(this.drawingArea, TRUE);
     gtk_widget_set_double_buffered(this.drawingArea, FALSE);
 
-    (void)g_timeout_add(100, (GSourceFunc)loop, this.drawingArea);
+    (void)g_timeout_add(200, (GSourceFunc)loop, this.drawingArea);
 
     gint y = 220;
     gint x =  border_width+5;
@@ -424,7 +425,7 @@ void initUI () {
 	   	readParams = (readThreadParams*) malloc(sizeof(readThreadParams));
 	    readParams->car.x = x;
 	    readParams->car.y = y;
-	    readParams->car.width = 10;
+	    readParams->car.width = 18;
 		readParams->car.height = 15;
 	    int iret = pthread_create (&hThread, NULL, loopThreads, readParams);
 	    if (iret) {
@@ -432,7 +433,7 @@ void initUI () {
 	    }
 	    y = y - 20;
 	    x = x + 15;
-    }*/
+    }
 
     gtk_main();
 }
