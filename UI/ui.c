@@ -1,9 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <gtk/gtk.h>
 #include <pthread.h>
 
+#include "global.h"
+#include "events.h"
 #include "ui.h"
 
 static int currently_drawing = 0;
@@ -20,6 +18,8 @@ struct readThreadParams
 {
 	 GdkRectangle car;
 } typedef readThreadParams;
+
+/* --------------------------- DRAWING METHODS --------------------------- */
 
 /* drawCar
  * Draws a car
@@ -211,30 +211,8 @@ void drawThreadville (GtkWidget *widget) {
 }
 
 
-/* --------------------------- EVENTS --------------------------- */
 
-void gtk_expose_event (GtkWidget *widget, GdkEventExpose *event) {
-	gdk_draw_drawable(widget->window, 
-			widget->style->fg_gc[GTK_WIDGET_STATE (widget)], 
-			this.pixMap, 
-			event->area.x, event->area.y,
-			event->area.x, event->area.y,
-			event->area.width, event->area.height);
-
-	drawThreadville(widget);
-}
-
-void gtk_configure_event (GtkWidget *widget, GdkEventConfigure *event) {
-	if (this.pixMap)
-		g_object_unref(this.pixMap);
-
-	this.pixMap = gdk_pixmap_new(widget->window, widget->allocation.width, widget->allocation.height, -1);
-	drawThreadville(widget);
-}
-
-
-
-/* --------------------------- METHODS --------------------------- */
+/* --------------------------- CONTROL METHODS --------------------------- */
 
 /* createDrawingArea
  * Creates the main drawing area
@@ -287,6 +265,7 @@ void createWindow () {
 	//Generate car
 	GtkWidget *generateCarBtn = gtk_button_new_with_label("Generar carro");
 	gtk_table_attach_defaults((GtkTable*) parametersTable, generateCarBtn, 0,1,0,1);
+	gtk_signal_connect(GTK_OBJECT(generateCarBtn), "clicked", GTK_SIGNAL_FUNC(generate_car_callback_event), NULL);
 	GtkWidget *carPathInput = gtk_entry_new();
 	gtk_entry_set_text((GtkEntry*) carPathInput, "e.g., A1, B1, C2, C5");
 	gtk_table_attach_defaults((GtkTable*) parametersTable, carPathInput, 1,2,0,1);
@@ -306,6 +285,7 @@ void createWindow () {
 	// Generate Ambulance
 	GtkWidget *generateAmbulanceBtn = gtk_button_new_with_label("Generar Ambulancia");
 	gtk_table_attach_defaults((GtkTable*) parametersTable, generateAmbulanceBtn, 4,5,0,1);
+	gtk_signal_connect(GTK_OBJECT(generateAmbulanceBtn), "clicked", GTK_SIGNAL_FUNC(generate_ambulance_callback_event), NULL);
 	GtkWidget *ambulancePathInput = gtk_entry_new();
 	gtk_entry_set_text((GtkEntry*) ambulancePathInput, "e.g., A1, B1, C2, C5");
 	gtk_table_attach_defaults((GtkTable*) parametersTable, ambulancePathInput, 5,6,0,1);
@@ -352,8 +332,10 @@ void createWindow () {
 	// Start/Finish
 	GtkWidget *stopBtn = gtk_button_new_with_label("Terminar");
 	gtk_table_attach_defaults((GtkTable*) parametersTable, stopBtn, 6,7,2,3);
+	gtk_signal_connect(GTK_OBJECT(stopBtn), "clicked", GTK_SIGNAL_FUNC(stop_simulation_callback_event), NULL);
 	GtkWidget *startBtn = gtk_button_new_with_label("Simular");
 	gtk_table_attach_defaults((GtkTable*) parametersTable, startBtn, 7,8,2,3);
+	gtk_signal_connect(GTK_OBJECT(startBtn), "clicked", GTK_SIGNAL_FUNC(start_simulation_callback_event), NULL);
 	
 	gtk_container_add((GtkContainer*) parametersFrame, parametersTable);
 	gtk_box_pack_start((GtkBox*) this.vbox, parametersFrame, FALSE, FALSE, 0);
@@ -409,7 +391,7 @@ void initUI () {
     display();
 
     //we can turn off gtk's automatic painting and double buffering routines.
-    gtk_widget_set_app_paintable(this.drawingArea, TRUE);
+    /*gtk_widget_set_app_paintable(this.drawingArea, TRUE);
     gtk_widget_set_double_buffered(this.drawingArea, FALSE);
 
     (void)g_timeout_add(200, (GSourceFunc)loop, this.drawingArea);
@@ -433,7 +415,7 @@ void initUI () {
 	    }
 	    y = y - 20;
 	    x = x + 15;
-    }
+    }*/
 
     gtk_main();
 }
