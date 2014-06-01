@@ -114,11 +114,12 @@ void drawCar (gint x, gint y, gint width, gint height) {
  * @return void
  */
 void drawThreadville (GtkWidget *widget) {
+
 	// Background
 	gdk_draw_rectangle(this.pixMap, widget->style->bg_gc[0], TRUE, 0, 0, widget->allocation.width, widget->allocation.height);
 	
 	// Streets
-	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, border_width, 0, canvas_width, canvas_height);
+	gdk_draw_rectangle(this.pixMap, widget->style->bg_gc[0], TRUE, border_width, 0, canvas_width, canvas_height);
 
 	// Uptown Blocks - top
 	drawBlock (widget, 20, 20, 1, 1, "A");
@@ -203,13 +204,13 @@ void drawThreadville (GtkWidget *widget) {
 void createDrawingArea () {
 	// Background color
 	GdkColor color;
-	gdk_color_parse("green", &color);
+	gdk_color_parse("#458B00", &color);
 
 	// Creates drawing area with the specified dimensions and background color
 	this.drawingArea = gtk_drawing_area_new();
 	gtk_drawing_area_size((GtkDrawingArea*) this.drawingArea, canvas_width, canvas_height);
 	gtk_widget_modify_bg((GtkWidget*) this.drawingArea, GTK_STATE_NORMAL, &color);
-	gdk_color_parse("yellow", &color);
+	gdk_color_parse("#FFA824", &color);
 	gtk_widget_modify_fg((GtkWidget*) this.drawingArea, GTK_STATE_NORMAL, &color);
 
 	// Attach events to the drawing area
