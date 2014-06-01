@@ -15,5 +15,33 @@ typedef struct _uivars {
 
 uivars this;
 
+enum CarType {
+	RED,
+	BLUE,
+	GREEN,
+	BLACK,
+	WHITE,
+	YELLOW
+};
+
+GtkWidget *carPathInput;
+GtkWidget *carTypeCombo;
+GtkWidget *carModeCheck;
+
+GtkWidget *ambulancePathInput;
+GtkWidget *ambulanceModeCheck;
+
+GtkWidget *redBusModeCheck;
+GtkWidget *greenBusModeCheck;
+GtkWidget *blueBusModeCheck;
+GtkWidget *whiteBusModeCheck;
+GtkWidget *grayBusModeCheck;
+GtkWidget *blackBusModeCheck;
+GtkWidget *lightBlueBusModeCheck;
+GtkWidget *pinkBusModeCheck;
+GtkWidget *orangeBusModeCheck;
+GtkWidget *allBusesModeCheck;
+GtkWidget *obstaclesModeCheck;
+
 
 #endif

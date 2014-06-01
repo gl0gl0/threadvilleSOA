@@ -24,10 +24,144 @@ void gtk_configure_event (GtkWidget *widget, GdkEventConfigure *event) {
 
 void generate_car_callback_event (GtkWidget *widget, gpointer data) {
 	g_print("Generate car pressed: %s \n", (char *)data);
+
+	gboolean is_auto = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(carModeCheck));
+
+	if (is_auto) {
+		const gchar *entryText;
+		char copy[100];
+		const char s[2] = ",";
+		char *token;
+
+		entryText = gtk_entry_get_text(GTK_ENTRY(carPathInput));
+		g_print("Path: %s \n", (char *)entryText);
+
+		enum CarType carType = gtk_combo_box_get_active (GTK_COMBO_BOX(carTypeCombo));
+
+		// TODO create car with this specific params
+	} else {
+		// TODO create car random parameters
+	}
 }
+	
 
 void generate_ambulance_callback_event (GtkWidget *widget, gpointer data) {
 	g_print("Generate ambulance pressed: %s \n", (char *)data);
+
+	gboolean is_auto = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ambulanceModeCheck));
+
+	if (is_auto) {
+		const gchar *entryText;
+		char copy[100];
+		const char s[2] = ",";
+		char *token;
+
+		entryText = gtk_entry_get_text(GTK_ENTRY(ambulancePathInput));
+		g_print("Path: %s \n", (char *)entryText);
+
+		// TODO create ambulance with this specific params
+	} else {
+		// TODO create ambulance random parameters
+	}
+}
+
+void red_bus_checkbox_callback_event (GtkWidget *widget, gpointer data) {
+	gboolean is_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(redBusModeCheck));
+	if (is_enabled) {
+		// Activar bus
+	} else {
+		// Desactivar bus
+	}
+}
+
+void green_bus_checkbox_callback_event (GtkWidget *widget, gpointer data) {
+	gboolean is_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(greenBusModeCheck));
+	if (is_enabled) {
+		// Activar bus
+	} else {
+		// Desactivar bus
+	}
+}
+
+void blue_bus_checkbox_callback_event (GtkWidget *widget, gpointer data) {
+	gboolean is_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(blueBusModeCheck));
+	if (is_enabled) {
+		// Activar bus
+	} else {
+		// Desactivar bus
+	}
+}
+
+void white_bus_checkbox (GtkWidget *widget, gpointer data) {
+	gboolean is_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(whiteBusModeCheck));
+	if (is_enabled) {
+		// Activar bus
+	} else {
+		// Desactivar bus
+	}
+}
+
+void gray_bus_checkbox_callback_event (GtkWidget *widget, gpointer data) {
+	gboolean is_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(grayBusModeCheck));
+	if (is_enabled) {
+		// Activar bus
+	} else {
+		// Desactivar bus
+	}
+}
+
+void black_bus_checkbox_callback_event (GtkWidget *widget, gpointer data) {
+	gboolean is_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(blackBusModeCheck));
+	if (is_enabled) {
+		// Activar bus
+	} else {
+		// Desactivar bus
+	}
+}
+
+void lightblue_bus_checkbox_callback_event (GtkWidget *widget, gpointer data) {
+	gboolean is_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(lightBlueBusModeCheck));
+	if (is_enabled) {
+		// Activar bus
+	} else {
+		// Desactivar bus
+	}
+}
+
+void pink_bus_checkbox_callback_event (GtkWidget *widget, gpointer data) {
+	gboolean is_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pinkBusModeCheck));
+	if (is_enabled) {
+		// Activar bus
+	} else {
+		// Desactivar bus
+	}
+}
+
+void orange_bus_checkbox_callback_event (GtkWidget *widget, gpointer data) {
+	gboolean is_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(orangeBusModeCheck));
+	if (is_enabled) {
+		// Activar bus
+	} else {
+		// Desactivar bus
+	}
+}
+
+void all_buses_checkbox_callback_event (GtkWidget *widget, gpointer data) {
+	gboolean is_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(allBusesModeCheck));
+	if (is_enabled) {
+		// Activar bus
+	} else {
+		// Desactivar bus
+	}
+}
+
+void obstacles_checkbox_callback_event (GtkWidget *widget, gpointer data) {
+	gboolean is_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(obstaclesModeCheck));
+	if (is_enabled) {
+		// Activar bus
+	} else {
+		// Desactivar bus
+	}
 }
 
 void stop_simulation_callback_event (GtkWidget *widget, gpointer data) {
