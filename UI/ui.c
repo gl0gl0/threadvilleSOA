@@ -3,21 +3,17 @@
 #include "global.h"
 #include "events.h"
 #include "ui.h"
+#include "../Threadville.h"
 
 static int currently_drawing = 0;
 
 gint window_width = 1120;
 gint window_height = 800;
-gint border_width = 80;
+gint border_width = borderwidth;
 gint canvas_width = 960;
 gint canvas_height = 680;
 
 gint unit = 20;
-
-struct readThreadParams
-{
-	 GdkRectangle car;
-} typedef readThreadParams;
 
 /* --------------------------- DRAWING METHODS --------------------------- */
 
@@ -37,21 +33,6 @@ void drawCar (gint x, gint y, gint width, gint height) {
 	gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-50-*-*-*-*-iso8859-1"), this.drawingArea->style->black_gc, (car.x+2), (car.y+10), "A1/5");
 
 	gtk_widget_queue_draw_area(this.drawingArea, car.x, car.y, car.width, car.height);
-}
-
-//do_draw will be executed in a separate thread whenever we would like to update
-//our animation
-void *do_draw(void *ptr){
-
-    //When dealing with gdkPixmap's, we need to make sure not to
-    //access them from outside gtk_main().
-    gdk_threads_enter();
-    struct readThreadParams *readParams = ptr;
-    GdkRectangle car = readParams->car;
-	drawCar(car.x, car.y, car.width, car.height);
-    gdk_threads_leave();
-
-    return NULL;
 }
 
 /* drawBlock
@@ -344,22 +325,8 @@ void createWindow () {
 	gtk_signal_connect((GtkObject*) this.mainWindow, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 }
 
-
-void *loopThreads(void *ptr){
-	readThreadParams *readParams = ptr;
-	
-    GdkRectangle car = readParams->car;
-	while(1){
-		sleep(1);
-		readParams->car.x--;
-	readParams->car.y++;
-		
-		do_draw(readParams);
-	}
-}
-
 gboolean loop (GtkWidget *window) {
-	 printf("Loop\n");
+	 //printf("Loop\n");
 
     int width, height;
     gdk_drawable_get_size(this.pixMap, &width, &height);
@@ -391,31 +358,29 @@ void initUI () {
     display();
 
     //we can turn off gtk's automatic painting and double buffering routines.
-    /*gtk_widget_set_app_paintable(this.drawingArea, TRUE);
+    gtk_widget_set_app_paintable(this.drawingArea, TRUE);
     gtk_widget_set_double_buffered(this.drawingArea, FALSE);
 
-    (void)g_timeout_add(200, (GSourceFunc)loop, this.drawingArea);
+    (void)g_timeout_add(30, (GSourceFunc)loop, this.drawingArea);
+    
+    int i;
+	for (i=0; i<N; i++)
+		Threadville[i] = 0;
+	init();
+	srand(time(NULL));
+	pthread_mutex_init(&lock, NULL);
+	pthread_cond_init(&cond, NULL);
 
-    gint y = 220;
-    gint x =  border_width+5;
-    int i = 0;
-    for (i; i < 5; ++i)
-    {
-    	printf("Pthread\n");
-	    pthread_t hThread;
-	   	readThreadParams* readParams;
-	   	readParams = (readThreadParams*) malloc(sizeof(readThreadParams));
-	    readParams->car.x = x;
-	    readParams->car.y = y;
-	    readParams->car.width = 18;
-		readParams->car.height = 15;
-	    int iret = pthread_create (&hThread, NULL, loopThreads, readParams);
-	    if (iret) {
-	    	pthread_join(hThread, NULL);
-	    }
-	    y = y - 20;
-	    x = x + 15;
-    }*/
+	for (i=0; i<M; i++){
+		autos[i] = (automovil *) malloc(sizeof(automovil));
+		autos[i]->color = i;
+		generarCarro(autos[i]);
+	}
+	for (i=0; i<M; i++)
+		pthread_detach(autos[i]->hilo);
+	pthread_cond_destroy(&cond);
+	pthread_mutex_destroy(&lock);
+	printf("\n");
 
     gtk_main();
 }

@@ -1,2 +1,32 @@
 RECORDAR DAR MENOR PESO A LA PISTA
-MANEJOR UN SENTIDO DE VIA POR PUENTE
+
+
+Larry y Joe, siempre tienen un par de policías en sus extremos que dejan pasar K automoviles en un sentido, y luego K automóviles en el otro sentido (si hay menos de K autos en un sentido dejan pasar a los de la otra punta). Los autobuses cuentan por 2 automóviles.
+
+Curly y Shemp, tienen semáforos (rojo y verde) en cada punta que dejan pasar carros alternadamente en cada sentido durante M segundos y N segundos (M y N podrían ser diferentes).
+
+Moe, que está en el centro de la autopista, se administra con “la ley de la jungla” donde los autos se meten al puente en cuanto pueden, siendo la única regla que un auto no puede entrar si ya hay otro en sentido contrario dentro del puente.
+
+Hay buses cuyo tamaño equivale a 2 autos corrientes
+hacen paradas de 5 segundos en puntos establecidos de su recorrido
+
+Bus Rojo: conocido como la “periférica grande”. Hace paradas en A1, D1, F2, L4, Z (dándole vuelta a la rotonda), R2, X5, U5, S6, M1, Y (dándole vuelta a la rotonda), G5, y A1.
+
+Bus Verde: conocido como la “periférica norte”. Sus paradas son: E2, L3, Z (dándole vuelta a la rotonda), toma la autopista hacia el Oeste, Y (dándole vuelta a la rotonda), G6, B1 y E2.
+
+Bus Azul: conocido como la “periférica sur”. Hace paradas en R3, W5, T6, M6, Y (dándole vuelta a la rotonda), toma la autopista hacia el Este, Z (dándole vuelta a la rotonda), y R3.
+
+Buz Blanco: I4, O3, T5, N1, H6, C1 y I4.
+
+Buz Gris: U5, O1, I6, D1, J4, P3 y U5.
+
+Buz Negro: J6, E1, K4, Q3, V5, P1 y J6.
+
+Buz Rosa: F5, A6, A1, F2, F5
+
+Buz Celeste: S6, S1, X2, X5, y S6
+
+Buz Naranja: bus turístico conocido como la “lombriz”. Hace paradas en M3, O6, C8, C3, O3, Q6, E8, E3, Q3, X4, X7, L6, J3, V4, V7, J6, H3, T4, T7, H6, A8, A3 y M3.
+
+Las ambulancias son vehículos especiales que se mueven a gran velocidad y siempre tienen prioridad sobre los demás automóviles o buses. Las ambulancias “nacen” en Y y mueren en Z. Solamente hacen 2 paradas intermedias (escogidas aleatoriamente) donde se quedarán 8 segundos en cada una.
+

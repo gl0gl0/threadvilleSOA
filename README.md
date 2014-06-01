@@ -3,5 +3,12 @@ threadvilleSOA
 
 To run:
 
-$ gcc -g main.c UI/ui.c UI/events.c -o main `pkg-config --cflags --libs gtk+-2.0` -lX11 -lglut -lGLU -lGL -lm -lXext -lrt
-$ ./main
+	make clean
+	make
+	./Threadville
+
+To run without UI:
+	Uncomment main in Tarea.c
+	make clean
+	make NoUI
+	./NoUI
