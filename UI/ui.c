@@ -151,12 +151,16 @@ void drawCar (int colorCarro, gint xant, gint yant, gint x, gint y, gint width, 
  * @return void
  */
 void drawThreadville (GtkWidget *widget) {
+	GdkColor color;
+	gdk_color_parse("#4C4C4C", &color);
+	GdkGC *gc = gdk_gc_new(this.drawingArea->window);
+	gdk_gc_set_rgb_fg_color(gc, &color);
 
 	// Background
 	gdk_draw_rectangle(this.pixMap, widget->style->bg_gc[0], TRUE, 0, 0, widget->allocation.width, widget->allocation.height);
 	
 	// Streets
-	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, border_width, 0, canvas_width, canvas_height);
+	gdk_draw_rectangle(this.pixMap, gc, TRUE, border_width, 0, canvas_width, canvas_height);
 
 	// Uptown Blocks - top
 	drawBlock (widget, 20, 20, 1, 1, "A");
@@ -200,11 +204,15 @@ void drawThreadville (GtkWidget *widget) {
 	drawBlock (widget, 820, 540, 1, 1, "X");
 
 	// Bridges
-	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, border_width+150, 280, 20, unit*6);
-	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, border_width+310, 280, 20, unit*6);
-	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, border_width+470, 280, 20, unit*6);
-	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, border_width+630, 280, 20, unit*6);
-	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, border_width+790, 280, 20, unit*6);
+	gdk_color_parse("#C1C1C1", &color);
+	GdkGC *gc_bridge = gdk_gc_new(this.drawingArea->window);
+	gdk_gc_set_rgb_fg_color(gc_bridge, &color);
+
+	gdk_draw_rectangle(this.pixMap, gc_bridge, TRUE, border_width+150, 280, 20, unit*6);
+	gdk_draw_rectangle(this.pixMap, gc_bridge, TRUE, border_width+310, 280, 20, unit*6);
+	gdk_draw_rectangle(this.pixMap, gc_bridge, TRUE, border_width+470, 280, 20, unit*6);
+	gdk_draw_rectangle(this.pixMap, gc_bridge, TRUE, border_width+630, 280, 20, unit*6);
+	gdk_draw_rectangle(this.pixMap, gc_bridge, TRUE, border_width+790, 280, 20, unit*6);
 
 	// Vertical lines
 	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], border_width+160, 20, border_width+160, 280);
@@ -219,12 +227,12 @@ void drawThreadville (GtkWidget *widget) {
 	gdk_draw_line(this.pixMap, widget->style->fg_gc[0], border_width+800, 400, border_width+800, 660);
 
 	// Rotondas Y
-	gdk_draw_arc(this.pixMap, widget->style->black_gc, TRUE, 0, 280, 120, 120, 0, 360*64);
+	gdk_draw_arc(this.pixMap, gc, TRUE, 0, 280, 120, 120, 0, 360*64);
 	gdk_draw_arc(this.pixMap, widget->style->bg_gc[0], TRUE, 20, 300, 80, 80, 0, 360*64);
 	gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-300-*-*-*-*-iso8859-1"), widget->style->black_gc, 50, 355, "Y");
 
 	// Rotondas Z
-	gdk_draw_arc(this.pixMap, widget->style->black_gc, TRUE, border_width+canvas_width-unit*2, 280, 120, 120, 0, 360*64);
+	gdk_draw_arc(this.pixMap, gc, TRUE, border_width+canvas_width-unit*2, 280, 120, 120, 0, 360*64);
 	gdk_draw_arc(this.pixMap, widget->style->bg_gc[0], TRUE, border_width+canvas_width-unit, 300, 80, 80, 0, 360*64);
 	gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-300-*-*-*-*-iso8859-1"), widget->style->black_gc, border_width+canvas_width+10, 355, "Z");
 }
