@@ -15,17 +15,11 @@ void recorrer(void* carro){
 			Threadville[a->posicion] = 0;
 			a->posicion = siguiente;
 			dibujar(a->posicion);
-			usleep(800);
+			usleep(33000);
 			pthread_mutex_unlock(&lock);
 		}
 		dibujar(a->posicion);
-		usleep(800);
-		if (siguiente == a->posicion){
-			//printf("%d_%d_%d_", a->color, Threadville[siguiente], siguiente);
-			//printf("%d_", a->color);
-			//etiquetar(a->posicion);
-			//printf("%d ", a->posicion);
-		}
+		usleep(1000);
 	}
 	Threadville[a->posicion] = 0;
 	pthread_mutex_unlock(&lock);
