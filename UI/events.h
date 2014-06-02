@@ -9,7 +9,7 @@ void generate_ambulance_callback_event (GtkWidget *widget, gpointer data);
 void red_bus_checkbox_callback_event (GtkWidget *widget, gpointer data);
 void green_bus_checkbox_callback_event (GtkWidget *widget, gpointer data);
 void blue_bus_checkbox_callback_event (GtkWidget *widget, gpointer data);
-void white_bus_checkbox (GtkWidget *widget, gpointer data);
+void white_bus_checkbox_callback_event (GtkWidget *widget, gpointer data);
 void gray_bus_checkbox_callback_event (GtkWidget *widget, gpointer data);
 void black_bus_checkbox_callback_event (GtkWidget *widget, gpointer data);
 void lightblue_bus_checkbox_callback_event (GtkWidget *widget, gpointer data);

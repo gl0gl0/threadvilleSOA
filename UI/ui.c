@@ -119,7 +119,7 @@ void drawThreadville (GtkWidget *widget) {
 	gdk_draw_rectangle(this.pixMap, widget->style->bg_gc[0], TRUE, 0, 0, widget->allocation.width, widget->allocation.height);
 	
 	// Streets
-	gdk_draw_rectangle(this.pixMap, widget->style->bg_gc[0], TRUE, border_width, 0, canvas_width, canvas_height);
+	gdk_draw_rectangle(this.pixMap, widget->style->black_gc, TRUE, border_width, 0, canvas_width, canvas_height);
 
 	// Uptown Blocks - top
 	drawBlock (widget, 20, 20, 1, 1, "A");
@@ -279,37 +279,48 @@ void createWindow () {
 	redBusModeCheck = gtk_check_button_new_with_label("Bus Rojo");
 	gtk_table_attach_defaults((GtkTable*) parametersTable, redBusModeCheck, 0,1,1,2);
 	gtk_toggle_button_set_active((GtkToggleButton*) redBusModeCheck, TRUE);
+	gtk_signal_connect(GTK_OBJECT(redBusModeCheck), "clicked", GTK_SIGNAL_FUNC(red_bus_checkbox_callback_event), NULL);
 	greenBusModeCheck = gtk_check_button_new_with_label("Bus Verde");
 	gtk_table_attach_defaults((GtkTable*) parametersTable, greenBusModeCheck, 1,2,1,2);
 	gtk_toggle_button_set_active((GtkToggleButton*) greenBusModeCheck, TRUE);
+	gtk_signal_connect(GTK_OBJECT(greenBusModeCheck), "clicked", GTK_SIGNAL_FUNC(green_bus_checkbox_callback_event), NULL);
 	blueBusModeCheck = gtk_check_button_new_with_label("Bus Azul");
 	gtk_table_attach_defaults((GtkTable*) parametersTable, blueBusModeCheck, 2,3,1,2);
 	gtk_toggle_button_set_active((GtkToggleButton*) blueBusModeCheck, TRUE);
+	gtk_signal_connect(GTK_OBJECT(blueBusModeCheck), "clicked", GTK_SIGNAL_FUNC(blue_bus_checkbox_callback_event), NULL);
 	whiteBusModeCheck = gtk_check_button_new_with_label("Bus Blanco");
 	gtk_table_attach_defaults((GtkTable*) parametersTable, whiteBusModeCheck, 3,4,1,2);
 	gtk_toggle_button_set_active((GtkToggleButton*) whiteBusModeCheck, TRUE);
+	gtk_signal_connect(GTK_OBJECT(whiteBusModeCheck), "clicked", GTK_SIGNAL_FUNC(white_bus_checkbox_callback_event), NULL);
 	grayBusModeCheck = gtk_check_button_new_with_label("Bus Gris");
 	gtk_table_attach_defaults((GtkTable*) parametersTable, grayBusModeCheck, 4,5,1,2);
 	gtk_toggle_button_set_active((GtkToggleButton*) grayBusModeCheck, TRUE);
+	gtk_signal_connect(GTK_OBJECT(grayBusModeCheck), "clicked", GTK_SIGNAL_FUNC(gray_bus_checkbox_callback_event), NULL);
 	blackBusModeCheck = gtk_check_button_new_with_label("Bus Negro");
 	gtk_table_attach_defaults((GtkTable*) parametersTable, blackBusModeCheck, 5,6,1,2);
 	gtk_toggle_button_set_active((GtkToggleButton*) blackBusModeCheck, TRUE);
+	gtk_signal_connect(GTK_OBJECT(blackBusModeCheck), "clicked", GTK_SIGNAL_FUNC(black_bus_checkbox_callback_event), NULL);
 	lightBlueBusModeCheck = gtk_check_button_new_with_label("Bus Celeste");
 	gtk_table_attach_defaults((GtkTable*) parametersTable, lightBlueBusModeCheck, 6,7,1,2);
 	gtk_toggle_button_set_active((GtkToggleButton*) lightBlueBusModeCheck, TRUE);
+	gtk_signal_connect(GTK_OBJECT(lightBlueBusModeCheck), "clicked", GTK_SIGNAL_FUNC(lightblue_bus_checkbox_callback_event), NULL);
 	pinkBusModeCheck = gtk_check_button_new_with_label("Bus Rosa");
 	gtk_table_attach_defaults((GtkTable*) parametersTable, pinkBusModeCheck, 7,8,1,2);
 	gtk_toggle_button_set_active((GtkToggleButton*) pinkBusModeCheck, TRUE);
+	gtk_signal_connect(GTK_OBJECT(pinkBusModeCheck), "clicked", GTK_SIGNAL_FUNC(pink_bus_checkbox_callback_event), NULL);
 
 	orangeBusModeCheck = gtk_check_button_new_with_label("Bus Naranja");
 	gtk_table_attach_defaults((GtkTable*) parametersTable, orangeBusModeCheck, 0,1,2,3);
 	gtk_toggle_button_set_active((GtkToggleButton*) orangeBusModeCheck, TRUE);
+	gtk_signal_connect(GTK_OBJECT(orangeBusModeCheck), "clicked", GTK_SIGNAL_FUNC(orange_bus_checkbox_callback_event), NULL);
 	allBusesModeCheck = gtk_check_button_new_with_label("Todos los Buses");
 	gtk_table_attach_defaults((GtkTable*) parametersTable, allBusesModeCheck, 1,2,2,3);
 	gtk_toggle_button_set_active((GtkToggleButton*) allBusesModeCheck, TRUE);
+	gtk_signal_connect(GTK_OBJECT(allBusesModeCheck), "clicked", GTK_SIGNAL_FUNC(all_buses_checkbox_callback_event), NULL);
 	obstaclesModeCheck = gtk_check_button_new_with_label("Obstaculos");
 	gtk_table_attach_defaults((GtkTable*) parametersTable, obstaclesModeCheck, 2,3,2,3);
 	gtk_toggle_button_set_active((GtkToggleButton*) obstaclesModeCheck, TRUE);
+	gtk_signal_connect(GTK_OBJECT(obstaclesModeCheck), "clicked", GTK_SIGNAL_FUNC(obstacles_checkbox_callback_event), NULL);
 
 	// Start/Finish
 	GtkWidget *stopBtn = gtk_button_new_with_label("Terminar");

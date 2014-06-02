@@ -92,7 +92,7 @@ void blue_bus_checkbox_callback_event (GtkWidget *widget, gpointer data) {
 	}
 }
 
-void white_bus_checkbox (GtkWidget *widget, gpointer data) {
+void white_bus_checkbox_callback_event (GtkWidget *widget, gpointer data) {
 	gboolean is_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(whiteBusModeCheck));
 	if (is_enabled) {
 		// Activar bus
