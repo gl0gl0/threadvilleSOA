@@ -9,7 +9,7 @@
 
 #define N 714
 
-#define M 1
+#define M 5
 
 #define borderwidth 80;
 
@@ -56,4 +56,4 @@ void generarCarro(automovil*);
 
 point toCanvas(int);
 
-void dibujar(int);
+void dibujar(int, int);

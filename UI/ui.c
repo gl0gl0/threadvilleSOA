@@ -22,9 +22,10 @@ gint unit = 20;
  *
  * @return void
  */
-void drawCar (gint x, gint y, gint width, gint height) {
+void drawCar (gint xant, gint yant, gint x, gint y, gint width, gint height) {
 	GdkRectangle car;
-
+	if (xant >= 0 && yant >= 0)
+		gtk_widget_queue_draw_area(this.drawingArea, xant, yant, width, height);
 	car.x = x;
 	car.y = y;
 	car.width = width;
@@ -337,17 +338,6 @@ void createWindow () {
 	gtk_signal_connect((GtkObject*) this.mainWindow, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 }
 
-gboolean loop (GtkWidget *window) {
-	 //printf("Loop\n");
-
-    int width, height;
-    gdk_drawable_get_size(this.pixMap, &width, &height);
-    gtk_widget_queue_draw_area(this.drawingArea, 0, 0, width, height);
-
-    return TRUE;
-
-}
-
 /* display
  * Shows all elements, in order
  *
@@ -373,8 +363,6 @@ void initUI () {
     gtk_widget_set_app_paintable(this.drawingArea, TRUE);
     gtk_widget_set_double_buffered(this.drawingArea, FALSE);
 
-    (void)g_timeout_add(100, (GSourceFunc)loop, this.drawingArea);
-    
     int i;
 	for (i=0; i<N; i++)
 		Threadville[i] = 0;

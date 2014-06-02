@@ -3,7 +3,7 @@
 void recorrer(void* carro){
 	automovil* a;
 	a = (automovil*) carro;
-	dibujar(a->posicion);
+	dibujar(-1, a->posicion);
 	int siguiente;
 	while (a->posicion != a->destino[1]){
 		siguiente =	avanzar(a);
@@ -11,8 +11,10 @@ void recorrer(void* carro){
 			pthread_mutex_lock(&lock);
 			Threadville[siguiente] = 1;
 			Threadville[a->posicion] = 0;
+			int ant;
+			ant = a->posicion;
 			a->posicion = siguiente;
-			dibujar(a->posicion);
+			dibujar(ant, a->posicion);
 			usleep(33000);
 			pthread_mutex_unlock(&lock);
 		}
@@ -23,13 +25,20 @@ void recorrer(void* carro){
 	pthread_mutex_unlock(&lock);
 }
 
-void dibujar(int pos){
+void dibujar(int ant, int pos){
 	point posCanvas;
 	posCanvas = toCanvas(pos);
+	point antCanvas;
+	if (ant < 0){
+		antCanvas.x = -1;
+		antCanvas.y = -1;
+	}
+	else	
+		antCanvas = toCanvas(ant);
 	printf("%d,%d\t", posCanvas.x, posCanvas.y);
 	//etiquetar(pos);
 	gdk_threads_enter();
-	drawCar(posCanvas.x, posCanvas.y, 18, 18);
+	drawCar(antCanvas.x, antCanvas.y, posCanvas.x, posCanvas.y, 18, 18);
     gdk_threads_leave();
 }
 
@@ -37,9 +46,9 @@ void dibujar(int pos){
 void generarCarro(automovil* a){
 	int r;
 	r = rand() % 714;
-	a->posicion = a->destino[0] = 644;	//7 161 319 473
+	a->posicion = a->destino[0] = r;
 	r = rand() % 714;
-	a->destino[1] = 649;				//154 0 466 312
+	a->destino[1] = r;
 	printf("Destinos: ");
 	etiquetar(a->destino[0]);
 	printf(" - %d: ", a->destino[0]);
