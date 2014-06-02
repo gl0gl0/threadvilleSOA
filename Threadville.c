@@ -1,6 +1,7 @@
 #include "Threadville.h"
 
 int sentido_puente[5];
+int count_k = 0;
 
 void etiquetar(int i){
 	int letra, num;
@@ -64,6 +65,66 @@ void etiquetar(int i){
 			else
 				printf("%c%d ", 89+letra, num);
 		}
+	}
+}
+
+int ingresar_puente_policia (automovil* a) {
+	int sentido_carro;
+	int sentido_puente_actual;
+
+	switch (a->posicion) {
+		case 179:
+			sentido_carro = 1;
+			sentido_puente_actual = 0;
+			break;
+		case 227:
+			sentido_carro = 1;
+			sentido_puente_actual = 4;
+			break;
+		case 257:
+			sentido_carro = -1;
+			sentido_puente_actual = 0;
+			break;
+		case 305:
+			sentido_carro = -1;
+			sentido_puente_actual = 4;
+			break;
+	}
+
+	switch (count_k) {
+		// no ha pasado nadie por el puente, cambia el sentido y avanza el carro
+		case 0:
+			sentido_puente[sentido_puente_actual] = sentido_carro;
+			count_k = count_k + 1;
+			return a-> posicion + sentido_puente[sentido_puente_actual];
+		// en caso de que ya hayan pasado los K carros, entonces cambio el sentido del puente,
+		// regreso el count a 0 y entra el carro si tiene el mismo sentido, sino espera
+		case K:
+			if (sentido_puente[sentido_puente_actual]) {
+				sentido_puente[sentido_puente_actual] = -1;
+			} else {
+				sentido_puente[sentido_puente_actual] = 1;
+			}
+			count_k = 0;
+
+			if (sentido_carro == sentido_puente[sentido_puente_actual]) {
+				count_k = count_k + 1;
+				return a-> posicion + sentido_puente[sentido_puente_actual];
+			} else {
+				// lo manda a esperar
+				// hace broadcast a los demas?
+			}
+			return a -> anterior; // esta es la posicion actual supongo?
+			break;
+		// el count es menor a K pero diferente a 0, si el carro tiene el mismo,
+		// sentido que el puente entra si no espera
+		default:
+			if (sentido_carro == sentido_puente[sentido_puente_actual]) {
+				count_k = count_k + 1;
+				return a-> posicion + sentido_puente[sentido_puente_actual];
+			} else {
+				// manda carro a esperar
+			}
 	}
 }
 
