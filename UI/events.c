@@ -265,6 +265,106 @@ void start_simulation_callback_event (GtkWidget *widget, gpointer data) {
 	BusVerde->destinoActual = 1;
 	generarCarro(BusVerde);
 	pthread_detach(BusVerde->hilo);
+	
+	/* BUS AZUL */
+	BusAzul = (automovil *) malloc(sizeof(automovil));
+	BusAzul->viajes = 7;
+	BusAzul->destino = (int*) malloc(sizeof(int) * BusAzul->viajes);
+	BusAzul->posicion = BusAzul->destino[0] = 310;
+	BusAzul->destino[1] = 446;
+	BusAzul->destino[2] = 366;
+	BusAzul->destino[3] = 241;
+	BusAzul->destino[4] = 674;
+	BusAzul->destino[5] = 694;
+	BusAzul->destino[6] = 310;
+	BusAzul->color = 2;
+	BusAzul->velocidad = 5 * 19000 + 3000 * (5 - 1);
+	BusAzul->destinoActual = 1;
+	generarCarro(BusAzul);
+	pthread_detach(BusAzul->hilo);
+
+	/* BUS BLANCO */
+	BusBlanco = (automovil *) malloc(sizeof(automovil));
+	BusBlanco->viajes = 7;
+	BusBlanco->destino = (int*) malloc(sizeof(int) * BusBlanco->viajes);
+	BusBlanco->posicion = BusBlanco->destino[0] = 202;
+	BusBlanco->destino[1] = 274;
+	BusBlanco->destino[2] = 363;
+	BusBlanco->destino[3] = 184;
+	BusBlanco->destino[4] = 256;
+	BusBlanco->destino[5] = 65;
+	BusBlanco->destino[6] = 202;
+	BusBlanco->color = 5;
+	BusBlanco->velocidad = 4 * 19000 + 3000 * (4 - 1);
+	BusBlanco->destinoActual = 1;
+	generarCarro(BusBlanco);
+	pthread_detach(BusBlanco->hilo);
+
+	/* BUS GRIS */
+	BusGris = (automovil *) malloc(sizeof(automovil));
+	BusGris->viajes = 7;
+	BusGris->destino = (int*) malloc(sizeof(int) * BusGris->viajes);
+	BusGris->posicion = BusGris->destino[0] = 368+23;
+	BusGris->destino[1] = 268;
+	BusGris->destino[2] = 196;
+	BusGris->destino[3] = 93;
+	BusGris->destino[4] = 214;
+	BusGris->destino[5] = 277;
+	BusGris->destino[6] = 368+23;
+	BusGris->color = 10;
+	BusGris->velocidad = 4 * 19000 + 3000 * (4 - 1);
+	BusGris->destinoActual = 1;
+	generarCarro(BusGris);
+	pthread_detach(BusGris->hilo);
+
+	/* BUS NEGRO */
+	BusNegro = (automovil *) malloc(sizeof(automovil));
+	BusNegro->viajes = 7;
+	BusNegro->destino = (int*) malloc(sizeof(int) * BusNegro->viajes);
+	BusNegro->posicion = BusNegro->destino[0] = 208;
+	BusNegro->destino[1] = 121;
+	BusNegro->destino[2] = 226;
+	BusNegro->destino[3] = 295;
+	BusNegro->destino[4] = 396+23;
+	BusNegro->destino[5] = 280;
+	BusNegro->destino[6] = 208;
+	BusNegro->color = 4;
+	BusNegro->velocidad = 4 * 19000 + 3000 * (4 - 1);
+	BusNegro->destinoActual = 1;
+	generarCarro(BusNegro);
+	pthread_detach(BusNegro->hilo);
+
+	/* BUS ROSA */
+	BusRosa = (automovil *) malloc(sizeof(automovil));
+	BusRosa->viajes = 5;
+	BusRosa->destino = (int*) malloc(sizeof(int) * BusRosa->viajes);
+	BusRosa->posicion = BusRosa->destino[0] = 163;
+	BusRosa->destino[1] = 26;
+	BusRosa->destino[2] = 9;
+	BusRosa->destino[3] = 152;
+	BusRosa->destino[4] = 163;
+	BusRosa->color = 8;
+	BusRosa->velocidad = 3 * 19000 + 3000 * (3 - 1);
+	BusRosa->destinoActual = 1;
+	generarCarro(BusRosa);
+	pthread_detach(BusRosa->hilo);
+
+	/* BUS CELESTE */
+	BusCeleste = (automovil *) malloc(sizeof(automovil));
+	BusCeleste->viajes = 5;
+	BusCeleste->destino = (int*) malloc(sizeof(int) * BusCeleste->viajes);
+	BusCeleste->posicion = BusCeleste->destino[0] = 338;
+	BusCeleste->destino[1] = 321;
+	BusCeleste->destino[2] = 464;
+	BusCeleste->destino[3] = 475;
+	BusCeleste->destino[4] = 338;
+	BusCeleste->color = 9;
+	BusCeleste->velocidad = 3 * 19000 + 3000 * (3 - 1);
+	BusCeleste->destinoActual = 1;
+	generarCarro(BusCeleste);
+	pthread_detach(BusCeleste->hilo);
+
+
 
 	int i;
 	for (i=0; i<indiceCarro; i++)

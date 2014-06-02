@@ -5,7 +5,8 @@ void recorrer(void* carro){
 	a = (automovil*) carro;
 	int siguiente;
 	int dest;
-	dest = 0;
+	while(1){
+		a->destinoActual = 1;
 	for (dest=0; dest<a->viajes-1; dest++){
 		dibujar(-1, a->posicion, a->color);
 		while (a->posicion != a->destino[a->destinoActual]){
@@ -27,10 +28,11 @@ void recorrer(void* carro){
 			}
 			usleep(1000);
 		}
+		usleep(3000000);
 		a->posicion = a->destino[a->destinoActual++];
 		Threadville[a->posicion] = 0;
 		pthread_mutex_unlock(&lock);
-		printf("\n");
+	}
 	}
 }
 
@@ -45,7 +47,7 @@ void dibujar(int ant, int pos, int color){
 	else	
 		antCanvas = toCanvas(ant);
 	//printf("%d,%d\t", posCanvas.x, posCanvas.y);
-	etiquetar(pos);
+	//etiquetar(pos);
 	gdk_threads_enter();
 	drawCar(color, antCanvas.x, antCanvas.y, posCanvas.x, posCanvas.y, 18, 18);
     gdk_threads_leave();
