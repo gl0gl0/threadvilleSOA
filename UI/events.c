@@ -69,8 +69,10 @@ void red_bus_checkbox_callback_event (GtkWidget *widget, gpointer data) {
 	gboolean is_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(redBusModeCheck));
 	if (is_enabled) {
 		// Activar bus
+		g_print("enabled");
 	} else {
 		// Desactivar bus
+		g_print("disabled");
 	}
 }
 
@@ -149,8 +151,28 @@ void orange_bus_checkbox_callback_event (GtkWidget *widget, gpointer data) {
 void all_buses_checkbox_callback_event (GtkWidget *widget, gpointer data) {
 	gboolean is_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(allBusesModeCheck));
 	if (is_enabled) {
+		gtk_toggle_button_set_active((GtkToggleButton*) redBusModeCheck, TRUE);
+		gtk_toggle_button_set_active((GtkToggleButton*) greenBusModeCheck, TRUE);
+		gtk_toggle_button_set_active((GtkToggleButton*) blueBusModeCheck, TRUE);
+		gtk_toggle_button_set_active((GtkToggleButton*) whiteBusModeCheck, TRUE);
+		gtk_toggle_button_set_active((GtkToggleButton*) grayBusModeCheck, TRUE);
+		gtk_toggle_button_set_active((GtkToggleButton*) blackBusModeCheck, TRUE);
+		gtk_toggle_button_set_active((GtkToggleButton*) lightBlueBusModeCheck, TRUE);
+		gtk_toggle_button_set_active((GtkToggleButton*) pinkBusModeCheck, TRUE);
+		gtk_toggle_button_set_active((GtkToggleButton*) orangeBusModeCheck, TRUE);
+
 		// Activar bus
 	} else {
+		gtk_toggle_button_set_active((GtkToggleButton*) redBusModeCheck, FALSE);
+		gtk_toggle_button_set_active((GtkToggleButton*) greenBusModeCheck, FALSE);
+		gtk_toggle_button_set_active((GtkToggleButton*) blueBusModeCheck, FALSE);
+		gtk_toggle_button_set_active((GtkToggleButton*) whiteBusModeCheck, FALSE);
+		gtk_toggle_button_set_active((GtkToggleButton*) grayBusModeCheck, FALSE);
+		gtk_toggle_button_set_active((GtkToggleButton*) blackBusModeCheck, FALSE);
+		gtk_toggle_button_set_active((GtkToggleButton*) lightBlueBusModeCheck, FALSE);
+		gtk_toggle_button_set_active((GtkToggleButton*) pinkBusModeCheck, FALSE);
+		gtk_toggle_button_set_active((GtkToggleButton*) orangeBusModeCheck, FALSE);
+
 		// Desactivar bus
 	}
 }
