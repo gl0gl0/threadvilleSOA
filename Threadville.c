@@ -72,7 +72,7 @@ int ingresar_puente_policia (automovil* a) {
 	int sentido_carro;
 	int sentido_puente_actual;
 
-	switch (a->anterior) {
+	switch (a->posicion) {
 		case 179:
 			sentido_carro = 1;
 			sentido_puente_actual = 0;
