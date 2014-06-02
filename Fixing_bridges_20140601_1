@@ -146,6 +146,7 @@ void *activarSemaforo()
         //sem_post(&semGlobal.cambio_Sentido);
         if(salidos>= maximo_salidos) 
         {
+            printf("FIN DEL PROGRAMA SALIERON %d y el maximo son %d\n", salidos, maximo_salidos);
             return NULL;
         }
     }
@@ -181,7 +182,7 @@ void entrar (Vehiculo *carro) {
             pthread_cond_wait(&puente.semaforo_disponible, &puente.lock);
         }
     }
-    /*else {
+    else {
 	switch(modalidad){
 			case 0:
 				// Si hay carros en el puente, pero viajan en la misma direccion puede ingresar
@@ -248,7 +249,7 @@ void entrar (Vehiculo *carro) {
 				}
 				break;
 		}
-    }*/
+    }
     pthread_mutex_unlock(&puente.lock);
 }
 
@@ -269,6 +270,7 @@ void cruzar (Vehiculo *carro) {
  */
 void salir (Vehiculo *carro) {
     
+    pthread_mutex_lock(&semGlobal.mutex);
     if(posicion_cola == carro->prioridad_creado)
     {
         timestamp();
@@ -288,6 +290,7 @@ void salir (Vehiculo *carro) {
             carro->sentido, carro->id, carro->prioridad_creado, posicion_cola);
         pthread_cond_wait(&puente.disponible_salida, &puente.lock);
     }
+    pthread_mutex_unlock(&semGlobal.mutex);
 
     /*if(posicion_cola == carro->prioridad_creado)
     {
