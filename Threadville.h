@@ -11,6 +11,8 @@
 
 #define M 1
 
+#define K 6
+
 #define borderwidth 80;
 
 struct ruta{
