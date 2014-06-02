@@ -136,9 +136,9 @@ void *activarSemaforo()
         //pthread_cond_wait(&semGlobal.ocupado, &semGlobal.mutex);
         verde = verde == 0 ? 1 : 0;
         printf("El Semaforo esta en verde para %s\n", verde == 0 ? "Este" : "Oeste");
-        pthread_cond_signal(&semGlobal.ocupado);
+        pthread_cond_broadcast(&semGlobal.ocupado);
         //pthread_cond_broadcast(&puente.semaforo_disponible);
-
+        pthread_cond_broadcast(&puente.semaforo_disponible);
         pthread_mutex_unlock(&semGlobal.mutex);
         sleep(10);
         //sem_post(&semGlobal.cambio_Sentido);
@@ -163,11 +163,15 @@ void entrar (Vehiculo *carro) {
         {
     		carros = 0;
             puente.sentido = carro->sentido;
-            puente.capacidad[puente.contador] = carro;
             puente.contador++;
+            salidos++;
             timestamp();
-            printf("(Puente Vacio)Vehículo %c-%d-%d ingresa al puente con el semaforo en %s\n", carro->sentido, carro->id, carro->prioridad_creado, 
-                verde == 0 ? "Este" : "Oeste");
+            unsigned int tiempo_cruzando;
+            tiempo_cruzando = (puente.largo / max((int) carro->velocidad, 1) * 10) / 1000; 
+            printf("(Puente Vacio)Vehículo %c-%d-%d ingresa al puente con el semaforo en %s, durara %d\n", carro->sentido, carro->id, carro->prioridad_creado, 
+                verde == 0 ? "Este" : "Oeste", tiempo_cruzando);
+            pthread_cond_broadcast(&puente.semaforo_disponible);
+            pthread_cond_broadcast(&puente.vacio);
         }
         else
         {
@@ -175,7 +179,7 @@ void entrar (Vehiculo *carro) {
             printf("Puente esta en 0 pero el Vehículo %c-%d-%d pasa a esperar\n", carro->sentido, carro->id, carro->prioridad_creado);
             pthread_cond_wait(&puente.semaforo_disponible, &puente.lock);
         }
-    } 
+    }
     /*else {
 	switch(modalidad){
 			case 0:
@@ -389,14 +393,16 @@ void *pasarPuente(Vehiculo *carro)
     {
         pthread_mutex_lock(&semGlobal.mutex);
         pthread_cond_wait(&semGlobal.ocupado, &semGlobal.mutex);
-        printf("Hola Imprimo un carro %d, %c-%d-%d\n", salidos, carro->sentido, carro->id, carro->prioridad_creado);
-        salidos++;
+        //printf("Hola Imprimo un carro %d, %c-%d-%d\n", salidos, carro->sentido, carro->id, carro->prioridad_creado);
+        
+        entrar(carro);
         unsigned int tiempo_cruzando;
         tiempo_cruzando = (puente.largo / max((int) carro->velocidad, 1) * 10) / 1000; 
         //printf("Cruzando %d\n", tiempo_cruzando);
-        entrar(carro);
+        //salidos++;
+        puente.contador--;
+        pthread_cond_broadcast(&semGlobal.ocupado);
         pthread_mutex_unlock(&semGlobal.mutex);
-        
         sleep(tiempo_cruzando);
         /*
         cruzar(carro);
