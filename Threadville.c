@@ -121,14 +121,43 @@ void init(){
 
 point toCanvas(int pos){
 	point ret;
-	if (pos >=7 && pos <=14){
-		ret.x = ((pos / 28 * 7 + pos % 28) - 7) * 20;
+	if (pos >=7 && pos <=14 || pos >=35 && pos <=42 || pos >=63 && pos <=70 || pos >=91 && pos <=98 ||
+		pos >=119 && pos <=126 || pos >=147 && pos <=154) {
+		ret.x = pos / 28 * 140 + 20 * (pos % 28 -7 + pos / 28);
 		ret.y = 0;
 	}
-	if (pos >=35 && pos <=42 || pos >=63 && pos <=70 || pos >=91 && pos <=98 ||
-		pos >=119 && pos <=126 || pos >=147 && pos <=154) {
-		ret.x = ((pos / 28 * 7 + pos % 28) - 6) * 20;
-		ret.y = 0;
+	if (pos >=21 && pos <=27 || pos >=49 && pos <=55 || pos >=77 && pos <=83 || pos >=105 && pos <=111 ||
+		pos >=133 && pos <=139 || pos >=161 && pos <=167) {
+		pos = (-(pos - (pos / 28 + 1) * 28)) + 7 + pos / 28 * 28;
+		ret.x = pos / 28 * 140 + 20 * (pos % 28 -7 + pos / 28);
+		ret.y = 140;
+	}
+	if (pos == 0 || pos == 28 || pos == 56 || pos == 84 || pos == 112 || pos == 140){
+		ret.x = 160 * (pos / 28);
+		ret.y = 140;
+	}
+	if (pos >=319 && pos <=326 || pos >=347 && pos <=354 || pos >=375 && pos <=382 || pos >=403 && pos <=410 ||
+		pos >=431 && pos <=438 || pos >=459 && pos <=466) {
+		pos -= 312;
+		ret.x = pos / 28 * 140 + 20 * (pos % 28 -7 + pos / 28);
+		ret.y = 520;
+	}
+	if (pos >=333 && pos <=339 || pos >=361 && pos <=367 || pos >=389 && pos <=395 || pos >=417 && pos <=423 ||
+		pos >=445 && pos <=451 || pos >=473 && pos <=479) {
+		pos -= 312;
+		pos = (-(pos - (pos / 28 + 1) * 28)) + 7 + pos / 28 * 28;
+		ret.x = pos / 28 * 140 + 20 * (pos % 28 -7 + pos / 28);
+		ret.y = 660;
+	}
+	if (pos == 312 || pos == 340 || pos == 368 || pos == 396 || pos == 424 || pos == 452){
+		ret.x = 28 * (pos-312) / 28;
+		ret.y = 660;
+	}
+	if (pos >=1 && pos <=6 || pos >=29 && pos <=34 || pos >=57 && pos <=62 || pos >=85 && pos <=90 ||
+		pos >=113 && pos <=118 || pos >=141 && pos <=146) {
+		ret.x = 160 * (pos / 28);
+		pos = 7 - (pos - pos / 28 * 28) + pos / 28 * 28;
+		ret.y = (pos - pos / 28 * 28) * 20;
 	}
 	ret.x += borderwidth;
 	return ret;

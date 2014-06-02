@@ -373,7 +373,7 @@ void initUI () {
     gtk_widget_set_app_paintable(this.drawingArea, TRUE);
     gtk_widget_set_double_buffered(this.drawingArea, FALSE);
 
-    (void)g_timeout_add(30, (GSourceFunc)loop, this.drawingArea);
+    (void)g_timeout_add(100, (GSourceFunc)loop, this.drawingArea);
     
     int i;
 	for (i=0; i<N; i++)

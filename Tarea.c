@@ -3,8 +3,6 @@
 void recorrer(void* carro){
 	automovil* a;
 	a = (automovil*) carro;
-	//printf("%d_", a->color);
-	//etiquetar(a->posicion);
 	dibujar(a->posicion);
 	int siguiente;
 	while (a->posicion != a->destino[1]){
@@ -18,7 +16,7 @@ void recorrer(void* carro){
 			usleep(33000);
 			pthread_mutex_unlock(&lock);
 		}
-		dibujar(a->posicion);
+		//dibujar(a->posicion);
 		usleep(1000);
 	}
 	Threadville[a->posicion] = 0;
@@ -29,8 +27,9 @@ void dibujar(int pos){
 	point posCanvas;
 	posCanvas = toCanvas(pos);
 	printf("%d,%d\t", posCanvas.x, posCanvas.y);
+	//etiquetar(pos);
 	gdk_threads_enter();
-	drawCar(posCanvas.x, posCanvas.y, 18, 18);
+	//drawCar(posCanvas.x, posCanvas.y, 18, 18);
     gdk_threads_leave();
 }
 
@@ -38,15 +37,9 @@ void dibujar(int pos){
 void generarCarro(automovil* a){
 	int r;
 	r = rand() % 714;
-//	if (a->color==0)
-	a->posicion = a->destino[0] = 7;
-//	else
-//	a->posicion = a->destino[0] = 7;
+	a->posicion = a->destino[0] = 56;	//7 161 319 473
 	r = rand() % 714;
-//	if (a->color==0)
-	a->destino[1] = 154;
-//	else
-//	a->destino[1] = (28*5) +7;
+	a->destino[1] = 63;				//154 0 466 312
 	printf("Destinos: ");
 	etiquetar(a->destino[0]);
 	printf(" - %d: ", a->destino[0]);
@@ -56,23 +49,23 @@ void generarCarro(automovil* a){
 	pthread_create(&a->hilo, NULL, recorrer, (void *) a);
 }
 
-//int main(int argc, char* argv){
-	//int i;
-	//for (i=0; i<N; i++)
-		//Threadville[i] = 0;
-	//init();
-	//srand(time(NULL));
-	//pthread_mutex_init(&lock, NULL);
-	//pthread_cond_init(&cond, NULL);
-	//for (i=0; i<M; i++){
-		//autos[i] = (automovil *) malloc(sizeof(automovil));
-		//autos[i]->color = i;
-		//generarCarro(autos[i]);
-	//}
-	//for (i=0; i<M; i++)
-		//pthread_join(autos[i]->hilo, NULL);
-	//pthread_cond_destroy(&cond);
-	//pthread_mutex_destroy(&lock);
-	//printf("\n");
-	//return 0;
-//}
+int main(int argc, char* argv){
+	int i;
+	for (i=0; i<N; i++)
+		Threadville[i] = 0;
+	init();
+	srand(time(NULL));
+	pthread_mutex_init(&lock, NULL);
+	pthread_cond_init(&cond, NULL);
+	for (i=0; i<M; i++){
+		autos[i] = (automovil *) malloc(sizeof(automovil));
+		autos[i]->color = i;
+		generarCarro(autos[i]);
+	}
+	for (i=0; i<M; i++)
+		pthread_join(autos[i]->hilo, NULL);
+	pthread_cond_destroy(&cond);
+	pthread_mutex_destroy(&lock);
+	printf("\n");
+	return 0;
+}
