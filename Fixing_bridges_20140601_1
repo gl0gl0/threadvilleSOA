@@ -139,12 +139,13 @@ void *activarSemaforo()
         pthread_cond_broadcast(&semGlobal.ocupado);
         //pthread_cond_broadcast(&puente.semaforo_disponible);
         pthread_cond_broadcast(&puente.semaforo_disponible);
+        pthread_cond_broadcast(&puente.vacio);
         pthread_mutex_unlock(&semGlobal.mutex);
+
         sleep(10);
         //sem_post(&semGlobal.cambio_Sentido);
         if(salidos>= maximo_salidos) 
         {
-            printf("Fin del programa\n");
             return NULL;
         }
     }
@@ -268,14 +269,17 @@ void cruzar (Vehiculo *carro) {
  */
 void salir (Vehiculo *carro) {
     
-    if(posicion_cola == carro -> prioridad_creado)
+    if(posicion_cola == carro->prioridad_creado)
     {
-        puente.contador--;
         timestamp();
         printf("Esta saliendo el carro %c-%d-%d, la posicion a salir es %d\n", carro->sentido, carro->id, carro->prioridad_creado, posicion_cola);
+        pthread_t actual;
+        actual = pthread_self();
+        pthread_cancel(actual);
         posicion_cola++;
         salidos++;
-        pthread_cond_wait(&semGlobal.ocupado, &semGlobal.mutex);
+        puente.contador--;
+        //pthread_cond_broadcast(&semGlobal.ocupado, &semGlobal.mutex);
         //pthread_cond_broadcast(&puente.disponible_salida);
     }
     else
@@ -400,10 +404,11 @@ void *pasarPuente(Vehiculo *carro)
         tiempo_cruzando = (puente.largo / max((int) carro->velocidad, 1) * 10) / 1000; 
         //printf("Cruzando %d\n", tiempo_cruzando);
         //salidos++;
-        puente.contador--;
+        //puente.contador--;
         pthread_cond_broadcast(&semGlobal.ocupado);
         pthread_mutex_unlock(&semGlobal.mutex);
         sleep(tiempo_cruzando);
+        salir(carro);
         /*
         cruzar(carro);
         salir(carro);*/
@@ -466,6 +471,8 @@ int main(int argc, char **argv) {
     {   
         pthread_create(&init_sem, NULL, activarSemaforo, NULL);
     }
+
+    printf("Se crearan %d hilos\n", NUM_THREADS);
     
     for (i=0; i < NUM_THREADS; i++) {
         // generador de tiempos para media de vehiculos x = numero random con distribucion exponencial  u = numero random con distribucion uniforme
