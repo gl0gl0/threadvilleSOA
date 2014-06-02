@@ -9,7 +9,7 @@
 
 #define N 714
 
-#define M 5
+#define M 1
 
 #define borderwidth 80;
 
@@ -24,6 +24,7 @@ struct automovil{
 	int destino[2];
 	int posicion;
 	int color;
+	unsigned velocidad;
 	int anterior;
 } typedef automovil;
 
@@ -56,4 +57,6 @@ void generarCarro(automovil*);
 
 point toCanvas(int);
 
-void dibujar(int, int);
+void dibujar(int, int, int);
+
+int simular;

@@ -22,15 +22,48 @@ gint unit = 20;
  *
  * @return void
  */
-void drawCar (gint xant, gint yant, gint x, gint y, gint width, gint height) {
+void drawCar (int colorCarro, gint xant, gint yant, gint x, gint y, gint width, gint height) {
 	GdkRectangle car;
+	GdkColor color;
+	switch(colorCarro){
+		case 1: 
+			gdk_color_parse("#FF0000", &color);
+			break;
+		case 2: 
+			gdk_color_parse("#0000FF", &color);
+			break;
+		case 3: 
+			gdk_color_parse("#00FF00", &color);
+			break;
+		case 4: 
+			gdk_color_parse("#000000", &color);
+			break;
+		case 5: 
+			gdk_color_parse("#FFFF00", &color);
+			break;
+		case 6: 
+			gdk_color_parse("#FF6600", &color);
+			break;
+		case 7: 
+			gdk_color_parse("#FF33CC", &color);
+			break;
+		case 8: 
+			gdk_color_parse("#6699FF", &color);
+			break;
+		case 9: 
+			gdk_color_parse("#777777", &color);
+			break;
+	}
+	GdkGC* gcont;
+	gcont = gdk_gc_new(this.pixMap); 
+	gdk_gc_set_rgb_fg_color (gcont, &color);
 	if (xant >= 0 && yant >= 0)
 		gtk_widget_queue_draw_area(this.drawingArea, xant, yant, width, height);
 	car.x = x;
 	car.y = y;
 	car.width = width;
 	car.height = height;
-	gdk_draw_rectangle(this.pixMap, this.drawingArea->style->white_gc, TRUE, car.x, car.y, car.width, car.height);
+	gdk_draw_rectangle(this.pixMap, gcont, TRUE, car.x, car.y, car.width, car.height);
 	gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-50-*-*-*-*-iso8859-1"), this.drawingArea->style->black_gc, (car.x+2), (car.y+10), "A1/5");
 
 	gtk_widget_queue_draw_area(this.drawingArea, car.x, car.y, car.width, car.height);
@@ -370,7 +403,7 @@ void initUI () {
 	srand(time(NULL));
 	pthread_mutex_init(&lock, NULL);
 	pthread_cond_init(&cond, NULL);
-
+	simular = 0;
 	for (i=0; i<M; i++){
 		autos[i] = (automovil *) malloc(sizeof(automovil));
 		autos[i]->color = i;

@@ -1,5 +1,6 @@
 #include "global.h"
 #include "events.h"
+#include "../Threadville.h"
 
 /* --------------------------- EVENTS --------------------------- */
 
@@ -192,4 +193,5 @@ void stop_simulation_callback_event (GtkWidget *widget, gpointer data) {
 
 void start_simulation_callback_event (GtkWidget *widget, gpointer data) {
 	g_print("Start simulation pressed: %s \n", (char *)data);
+	simular = 1;
 }
