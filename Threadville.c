@@ -70,10 +70,10 @@ void etiquetar(int i){
 int avanzar(automovil* a){
 	//printf("?%d?%d?", sentido_puente[4], a->anterior);
 	if (a->anterior == 185 || a->anterior == 197 || a->anterior == 209 || a->anterior == 221 || a->anterior == 233)
-		if (Sucesores[Sucesores[a->posicion][a->destino[1]]][a->destino[1]]+11 == a->anterior)
+		if (Sucesores[Sucesores[a->posicion][a->destino[a->destinoActual]]][a->destino[a->destinoActual]]+11 == a->anterior)
 			return a->posicion + 1;
 	if (a->anterior == 251 || a->anterior == 263 || a->anterior == 275 || a->anterior == 287 || a->anterior == 299)
-		if (Sucesores[Sucesores[a->posicion][a->destino[1]]][a->destino[1]]-1 == a->anterior)
+		if (Sucesores[Sucesores[a->posicion][a->destino[a->destinoActual]]][a->destino[a->destinoActual]]-1 == a->anterior)
 			return a->posicion + 1;
 	// De G, ..., L van a ingresar al puente
 	if (a->anterior == 179 || a->anterior == 191 || a->anterior == 203 || a->anterior == 215 || a->anterior == 227){
@@ -118,7 +118,7 @@ int avanzar(automovil* a){
 	}
 
 	a->anterior = a->posicion;
-	return Sucesores[a->posicion][a->destino[1]];
+	return Sucesores[a->posicion][a->destino[a->destinoActual]];
 }
 
 void init(){
@@ -237,4 +237,91 @@ point toCanvas(int pos){
 	}
 	ret.x += borderwidth;
 	return ret;
+}
+
+
+int convertToken(char* t){
+	if (t[0] == 89)
+		return 674;
+	if (t[0] == 90)
+		return 694;
+	int l;
+	printf("---%s\n", t);
+	l = t[0] - 65;
+	if (l <= 0 && l >= 5){
+		switch(t[1]){
+			case 1:
+				return 9 + l * 28;
+			case 2:
+				return 12 + l * 28;
+			case 3:
+				return 16 + l * 28;
+			case 4:
+				return 19 + l * 28;
+			case 5:
+				return 23 + l * 28;
+			case 6:
+				return 26 + l * 28;
+			case 7:
+				return 2 + l * 28;
+			case 8:
+				return 5 + l * 28;
+		}
+	}
+	l = t[0] - 71;
+	if (l <= 0 && l >= 5){
+		switch(t[1]){
+			case 1:
+				return 26 + l * 28;
+			case 2:
+				return 23 + l * 28;
+			case 3:
+				return 175 + l * 12;
+			case 4:
+				return 178 + l * 12;
+			case 5:
+				return 172 + l * 12;
+			case 6:
+				return 169 + l * 12;
+		}
+	}
+	l = t[0] - 77;
+	if (l <= 0 && l >= 5){
+		switch(t[1]){
+			case 1:
+				return 244 + l * 12;
+			case 2:
+				return 247 + l * 12;
+			case 3:
+				return 250 + l * 12;
+			case 4:
+				return 324 + l * 28;
+			case 5:
+				return 321 + l * 28;
+			case 6:
+				return 241 + l * 12;
+		}
+	}
+	l = t[0] - 83;
+	if (l <= 0 && l >= 5){
+		switch(t[1]){
+			case 1:
+				return 321 + l * 28;
+			case 2:
+				return 324 + l * 28;
+			case 3:
+				return 328 + l * 28;
+			case 4:
+				return 331 + l * 28;
+			case 5:
+				return 335 + l * 28;
+			case 6:
+				return 338 + l * 28;
+			case 7:
+				return 314 + l * 28;
+			case 8:
+				return 317 + l * 28;
+		}
+	}
+		
 }

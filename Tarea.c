@@ -3,29 +3,35 @@
 void recorrer(void* carro){
 	automovil* a;
 	a = (automovil*) carro;
-	dibujar(-1, a->posicion, a->color);
 	int siguiente;
-	while(!simular){
-		usleep(1000);
-		continue;
-	}
-	while (a->posicion != a->destino[1]){
-		siguiente =	avanzar(a);
-		if (!Threadville[siguiente]){
-			pthread_mutex_lock(&lock);
-			Threadville[siguiente] = 1;
-			Threadville[a->posicion] = 0;
-			int ant;
-			ant = a->posicion;
-			a->posicion = siguiente;
-			dibujar(ant, a->posicion, a->color);
-			usleep(a->velocidad);
-			pthread_mutex_unlock(&lock);
+	int dest;
+	dest = 0;
+	for (dest=0; dest<a->viajes-1; dest++){
+		dibujar(-1, a->posicion, a->color);
+		while (a->posicion != a->destino[a->destinoActual]){
+			siguiente =	avanzar(a);
+			if (!Threadville[siguiente]){
+				pthread_mutex_lock(&lock);
+				Threadville[siguiente] = 1;
+				Threadville[a->posicion] = 0;
+				int ant;
+				ant = a->posicion;
+				a->posicion = siguiente;
+				dibujar(ant, a->posicion, a->color);
+				usleep(a->velocidad);
+				pthread_mutex_unlock(&lock);
+			}
+			while(!simular){
+				usleep(1000);
+				continue;
+			}
+			usleep(1000);
 		}
-		usleep(1000);
+		a->posicion = a->destino[a->destinoActual++];
+		Threadville[a->posicion] = 0;
+		pthread_mutex_unlock(&lock);
+		printf("\n");
 	}
-	Threadville[a->posicion] = 0;
-	pthread_mutex_unlock(&lock);
 }
 
 void dibujar(int ant, int pos, int color){
@@ -39,7 +45,7 @@ void dibujar(int ant, int pos, int color){
 	else	
 		antCanvas = toCanvas(ant);
 	//printf("%d,%d\t", posCanvas.x, posCanvas.y);
-	//etiquetar(pos);
+	etiquetar(pos);
 	gdk_threads_enter();
 	drawCar(color, antCanvas.x, antCanvas.y, posCanvas.x, posCanvas.y, 18, 18);
     gdk_threads_leave();
@@ -47,17 +53,12 @@ void dibujar(int ant, int pos, int color){
 
 
 void generarCarro(automovil* a){
-	int r;
-	r = rand() % 714;
-	a->posicion = a->destino[0] = 9;
-	r = rand() % 714;
-	a->destino[1] = 152;
-
 	printf("Destinos: ");
-	etiquetar(a->destino[0]);
-	printf(" - %d: ", a->destino[0]);
-	etiquetar(a->destino[1]);
-	printf(" - %d: ", a->destino[1]);
+	int i;
+	for (i=0; i<a->viajes; i++){
+		etiquetar(a->destino[i]);
+		printf(" - %d: ", a->destino[i]);
+	}
 	printf("\n");
 	pthread_create(&a->hilo, NULL, recorrer, (void *) a);
 }

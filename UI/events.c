@@ -30,19 +30,43 @@ void generate_car_callback_event (GtkWidget *widget, gpointer data) {
 
 	if (is_auto) {
 		const gchar *entryText;
-		char copy[100];
-		const char s[2] = ",";
-		char *token;
-
+		int i, j;
+		j = 0;
 		entryText = gtk_entry_get_text(GTK_ENTRY(carPathInput));
-		g_print("Path: %s \n", (char *)entryText);
+		for (i=0; i<strlen(entryText); i++){
+			if (entryText[i] == 44)
+				j++;
+		}
+		j++;
 
 		int color;
 		color = gtk_combo_box_get_active (GTK_COMBO_BOX(carTypeCombo)) + 1;
-		g_print("colro: %d", gtk_combo_box_get_active (GTK_COMBO_BOX(carTypeCombo)));
+
 		autos[indiceCarro] = (automovil *) malloc(sizeof(automovil));
 		autos[indiceCarro]->color = color;
+		if (j < 2)
+			autos[indiceCarro]->viajes = 2;
+		else
+			autos[indiceCarro]->viajes = j;
+		autos[indiceCarro]->destino = (int *) malloc(sizeof(int) * autos[indiceCarro]->viajes);
 		autos[indiceCarro]->velocidad = color * 19000 + 3000 * (color -1);
+		if (j>1){
+			const char s[2] = ",";
+			char *token;
+			token = strtok(entryText, s);
+			j = 0;
+			while( token != NULL )  {
+				autos[indiceCarro]->destino[j] = convertToken(token);
+				token = strtok(NULL, s);
+			}
+			autos[indiceCarro]->posicion = autos[indiceCarro]->destino[0]; 
+		}else{
+			int r;
+			r = rand() % 714;
+			autos[indiceCarro]->posicion = autos[indiceCarro]->destino[0] = r;
+			r = rand() % 714;
+			autos[indiceCarro]->destino[1] = r;
+		}
 		generarCarro(autos[indiceCarro++]);
 
 		// TODO create car with this specific params
@@ -195,12 +219,54 @@ void obstacles_checkbox_callback_event (GtkWidget *widget, gpointer data) {
 
 void stop_simulation_callback_event (GtkWidget *widget, gpointer data) {
 	g_print("Stop simulation pressed: %s \n", (char *)data);
+	simular = 0;
 }
 
 void start_simulation_callback_event (GtkWidget *widget, gpointer data) {
-	g_print("Start simulation pressed: %s \n", (char *)data);
+	g_print("Start simulation pressed\n");
 	simular = 1;
+	
+	/* BUS ROJO */
+	BusRojo = (automovil *) malloc(sizeof(automovil));
+	BusRojo->viajes = 13;
+	BusRojo->destino = (int*) malloc(sizeof(int) * BusRojo->viajes);
+	BusRojo->posicion = BusRojo->destino[0] = 9;
+	BusRojo->destino[1] = 93;
+	BusRojo->destino[2] = 152;
+	BusRojo->destino[3] = 238;
+	BusRojo->destino[4] = 694;
+	BusRojo->destino[5] = 307;
+	BusRojo->destino[6] = 475;
+	BusRojo->destino[7] = 368+23;
+	BusRojo->destino[8] = 338;
+	BusRojo->destino[9] = 244;
+	BusRojo->destino[10] = 674;
+	BusRojo->destino[11] = 173;
+	BusRojo->destino[12] = 9;
+	BusRojo->color = 1;
+	BusRojo->velocidad = 5 * 19000 + 3000 * (5 - 1);
+	BusRojo->destinoActual = 1;
+	generarCarro(BusRojo);
+	pthread_detach(BusRojo->hilo);
+	
+	/* BUS VERDE */
+	BusVerde = (automovil *) malloc(sizeof(automovil));
+	BusVerde->viajes = 7;
+	BusVerde->destino = (int*) malloc(sizeof(int) * BusVerde->viajes);
+	BusVerde->posicion = BusVerde->destino[0] = 124;
+	BusVerde->destino[1] = 228 + 7;
+	BusVerde->destino[2] = 694;
+	BusVerde->destino[3] = 674;
+	BusVerde->destino[4] = 168 + 5;
+	BusVerde->destino[5] = 28 + 9;
+	BusVerde->destino[6] = 112 + 12;
+	BusVerde->color = 3;
+	BusVerde->velocidad = 5 * 19000 + 3000 * (5 - 1);
+	BusVerde->destinoActual = 1;
+	generarCarro(BusVerde);
+	pthread_detach(BusVerde->hilo);
+
 	int i;
-	for (i=0; i<M; i++)
+	for (i=0; i<indiceCarro; i++)
 		pthread_detach(autos[i]->hilo);
 }

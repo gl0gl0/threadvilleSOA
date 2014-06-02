@@ -21,7 +21,8 @@ struct ruta{
 struct automovil{
 	pthread_t hilo;
 	int viajes;
-	int destino[2];
+	int* destino;
+	int destinoActual;
 	int posicion;
 	int color;
 	unsigned velocidad;
@@ -40,6 +41,16 @@ pthread_mutex_t lock;
 pthread_cond_t cond;
 
 automovil* autos[M];
+
+automovil *BusRojo;
+automovil *BusVerde;
+automovil *BusAzul;
+automovil *BusBlanco;
+automovil *BusGris;
+automovil *BusNegro;
+automovil *BusRosa;
+automovil *BusCeleste;
+automovil *BusNaranja;
 
 int indiceCarro;
 
@@ -62,3 +73,5 @@ point toCanvas(int);
 void dibujar(int, int, int);
 
 int simular;
+
+int convertToken(char*);

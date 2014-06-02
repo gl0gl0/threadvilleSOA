@@ -60,8 +60,7 @@ void drawCar (int colorCarro, gint xant, gint yant, gint x, gint y, gint width, 
 	GdkGC* gcont;
 	gcont = gdk_gc_new(this.pixMap); 
 	gdk_gc_set_rgb_fg_color (gcont, &color);
-	if (xant >= 0 && yant >= 0)
-		gtk_widget_queue_draw_area(this.drawingArea, xant, yant, width, height);
+	gtk_widget_queue_draw_area(this.drawingArea, xant, yant, width, height);
 	car.x = x;
 	car.y = y;
 	car.width = width;
@@ -286,7 +285,7 @@ void createWindow () {
 	gtk_table_attach_defaults((GtkTable*) parametersTable, generateCarBtn, 0,1,0,1);
 	gtk_signal_connect(GTK_OBJECT(generateCarBtn), "clicked", GTK_SIGNAL_FUNC(generate_car_callback_event), NULL);
 	carPathInput = gtk_entry_new();
-	gtk_entry_set_text((GtkEntry*) carPathInput, "e.g., A1, B1, C2, C5");
+	gtk_entry_set_text((GtkEntry*) carPathInput, "");
 	gtk_table_attach_defaults((GtkTable*) parametersTable, carPathInput, 1,2,0,1);
 	carTypeCombo = gtk_combo_box_new_text();
 	gtk_combo_box_append_text(GTK_COMBO_BOX(carTypeCombo), "Rojo");
