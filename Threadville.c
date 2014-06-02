@@ -108,6 +108,7 @@ int ingresar_puente_policia (automovil* a) {
 			count_k = 0;
 
 			if (sentido_carro == sentido_puente[sentido_puente_actual]) {
+				count_k = count_k + 1;
 				return a-> posicion + sentido_puente[sentido_puente_actual];
 			} else {
 				// lo manda a esperar
