@@ -15,6 +15,8 @@
 
 #define borderwidth 80;
 
+int NOBUSES;
+
 struct ruta{
 	int nodo;
 	struct ruta *sig;
@@ -28,6 +30,7 @@ struct automovil{
 	int posicion;
 	int color;
 	unsigned velocidad;
+	int tipo;
 	int anterior;
 } typedef automovil;
 

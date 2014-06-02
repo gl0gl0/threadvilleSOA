@@ -66,7 +66,10 @@ void drawCar (int colorCarro, gint xant, gint yant, gint x, gint y, gint width, 
 	car.width = width;
 	car.height = height;
 	gdk_draw_rectangle(this.pixMap, gcont, TRUE, car.x, car.y, car.width, car.height);
-	gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-50-*-*-*-*-iso8859-1"), this.drawingArea->style->black_gc, (car.x+2), (car.y+10), "A1/5");
+	if (colorCarro==4)
+		gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-50-*-*-*-*-iso8859-1"), this.drawingArea->style->white_gc, (car.x+2), (car.y+10), "A1/5");
+	else
+		gdk_draw_string(this.pixMap, gdk_font_load("-*-*-bold-r-normal--*-50-*-*-*-*-iso8859-1"), this.drawingArea->style->black_gc, (car.x+2), (car.y+10), "A1/5");
 
 	gtk_widget_queue_draw_area(this.drawingArea, car.x, car.y, car.width, car.height);
 }

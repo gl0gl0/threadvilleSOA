@@ -229,7 +229,7 @@ point toCanvas(int pos){
 	}
 	// 0 S-X
 	if (pos == 312 || pos == 340 || pos == 368 || pos == 396 || pos == 424 || pos == 452){
-		ret.x = 28 * (pos-312) / 28;
+		ret.x = 160 * (pos-312) / 28;
 		ret.y = 660;
 	}
 	// Calle A-G Suben
@@ -265,20 +265,20 @@ point toCanvas(int pos){
 		pos >=198 && pos <=203 || pos >=210 && pos <=215 ||	pos >=222 && pos <=227 || pos >=234 && pos <=239) {
 		if (pos >= 168)
 			pos = 16 * ((pos - 159) /12 - 1) + pos - 152;
-		ret.x = 140 * (pos / 28 + 1);
+		ret.x = 140 + (pos / 28)*160;
 		ret.y = ((pos - pos / 28 * 28) - 14) * 20;
 	}
 	// Calle S-M Bajan
 	if (pos >=246 && pos <=251 || pos >=258 && pos <=263 || pos >=270 && pos <=275 || pos >=282 && pos <=287 ||	
 		pos >=294 && pos <=299 || pos >=306 && pos <=311) {
 			pos = pos - 246;
-			ret.x = 140 * (pos / 12);
+			ret.x = 140 + (pos / 12)*160;
 			ret.y = pos % 12 * 20 + 400;
 	}
 	if (pos >=319 && pos <=324 || pos >=347 && pos <=352 || pos >=375 && pos <=380 || pos >=403 && pos <=408 ||	
 		pos >=431 && pos <=436 || pos >=459 && pos <=464){
 			pos = pos - 319;
-			ret.x = 140 * (pos / 28);
+			ret.x = 140 + (pos / 28)*160;
 			ret.y = pos % 28 * 20 + 540;
 	}
 	if (pos >=480 && pos <= 561){
@@ -307,80 +307,79 @@ int convertToken(char* t){
 	if (t[0] == 90)
 		return 694;
 	int l;
-	printf("---%s\n", t);
 	l = t[0] - 65;
-	if (l <= 0 && l >= 5){
+	if (l >= 0 && l <= 5){
 		switch(t[1]){
-			case 1:
+			case 49:
 				return 9 + l * 28;
-			case 2:
+			case 50:
 				return 12 + l * 28;
-			case 3:
+			case 51:
 				return 16 + l * 28;
-			case 4:
+			case 52:
 				return 19 + l * 28;
-			case 5:
+			case 53:
 				return 23 + l * 28;
-			case 6:
+			case 54:
 				return 26 + l * 28;
-			case 7:
+			case 55:
 				return 2 + l * 28;
-			case 8:
+			case 56:
 				return 5 + l * 28;
 		}
 	}
 	l = t[0] - 71;
-	if (l <= 0 && l >= 5){
+	if (l >= 0 && l <= 5){
 		switch(t[1]){
-			case 1:
+			case 49:
 				return 26 + l * 28;
-			case 2:
+			case 50:
 				return 23 + l * 28;
-			case 3:
+			case 51:
 				return 175 + l * 12;
-			case 4:
+			case 52:
 				return 178 + l * 12;
-			case 5:
+			case 53:
 				return 172 + l * 12;
-			case 6:
+			case 54:
 				return 169 + l * 12;
 		}
 	}
 	l = t[0] - 77;
-	if (l <= 0 && l >= 5){
+	if (l >= 0 && l <= 5){
 		switch(t[1]){
-			case 1:
+			case 49:
 				return 244 + l * 12;
-			case 2:
+			case 50:
 				return 247 + l * 12;
-			case 3:
+			case 51:
 				return 250 + l * 12;
-			case 4:
+			case 52:
 				return 324 + l * 28;
-			case 5:
+			case 53:
 				return 321 + l * 28;
-			case 6:
+			case 54:
 				return 241 + l * 12;
 		}
 	}
 	l = t[0] - 83;
-	if (l <= 0 && l >= 5){
+	if (l >= 0 && l <= 5){
 		switch(t[1]){
-			case 1:
+			case 49:
 				return 321 + l * 28;
-			case 2:
+			case 50:
 				return 324 + l * 28;
-			case 3:
+			case 51:
 				return 328 + l * 28;
-			case 4:
+			case 52:
 				return 331 + l * 28;
-			case 5:
+			case 53:
 				return 335 + l * 28;
-			case 6:
+			case 54:
 				return 338 + l * 28;
-			case 7:
+			case 55:
 				return 314 + l * 28;
-			case 8:
+			case 56:
 				return 317 + l * 28;
 		}
 	}

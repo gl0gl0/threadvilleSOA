@@ -9,6 +9,9 @@ void recorrer(void* carro){
 		a->destinoActual = 1;
 	for (dest=0; dest<a->viajes-1; dest++){
 		dibujar(-1, a->posicion, a->color);
+		printf("..%d..", a->tipo);
+		if (a->tipo == 2)
+			dibujar(-1, avanzar(a), a->color);
 		while (a->posicion != a->destino[a->destinoActual]){
 			siguiente =	avanzar(a);
 			if (!Threadville[siguiente]){
@@ -19,6 +22,8 @@ void recorrer(void* carro){
 				ant = a->posicion;
 				a->posicion = siguiente;
 				dibujar(ant, a->posicion, a->color);
+				if (a->tipo ==2)
+					dibujar(ant, avanzar(a), a->color);
 				usleep(a->velocidad);
 				pthread_mutex_unlock(&lock);
 			}
