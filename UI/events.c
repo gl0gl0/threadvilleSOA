@@ -37,7 +37,13 @@ void generate_car_callback_event (GtkWidget *widget, gpointer data) {
 		entryText = gtk_entry_get_text(GTK_ENTRY(carPathInput));
 		g_print("Path: %s \n", (char *)entryText);
 
-		enum CarType carType = gtk_combo_box_get_active (GTK_COMBO_BOX(carTypeCombo));
+		int color;
+		color = gtk_combo_box_get_active (GTK_COMBO_BOX(carTypeCombo)) + 1;
+		g_print("colro: %d", gtk_combo_box_get_active (GTK_COMBO_BOX(carTypeCombo)));
+		autos[indiceCarro] = (automovil *) malloc(sizeof(automovil));
+		autos[indiceCarro]->color = color;
+		autos[indiceCarro]->velocidad = color * 19000 + 3000 * (color -1);
+		generarCarro(autos[indiceCarro++]);
 
 		// TODO create car with this specific params
 	} else {
@@ -194,4 +200,7 @@ void stop_simulation_callback_event (GtkWidget *widget, gpointer data) {
 void start_simulation_callback_event (GtkWidget *widget, gpointer data) {
 	g_print("Start simulation pressed: %s \n", (char *)data);
 	simular = 1;
+	int i;
+	for (i=0; i<M; i++)
+		pthread_detach(autos[i]->hilo);
 }

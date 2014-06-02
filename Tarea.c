@@ -38,7 +38,7 @@ void dibujar(int ant, int pos, int color){
 	}
 	else	
 		antCanvas = toCanvas(ant);
-	printf("%d,%d\t", posCanvas.x, posCanvas.y);
+	//printf("%d,%d\t", posCanvas.x, posCanvas.y);
 	//etiquetar(pos);
 	gdk_threads_enter();
 	drawCar(color, antCanvas.x, antCanvas.y, posCanvas.x, posCanvas.y, 18, 18);
@@ -52,9 +52,7 @@ void generarCarro(automovil* a){
 	a->posicion = a->destino[0] = 9;
 	r = rand() % 714;
 	a->destino[1] = 152;
-	r = rand() % 6 + 1;
-	a->color = r;
-	a->velocidad = r * 19000;
+
 	printf("Destinos: ");
 	etiquetar(a->destino[0]);
 	printf(" - %d: ", a->destino[0]);

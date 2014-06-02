@@ -41,6 +41,8 @@ pthread_cond_t cond;
 
 automovil* autos[M];
 
+int indiceCarro;
+
 
 
 void etiquetar(int);
