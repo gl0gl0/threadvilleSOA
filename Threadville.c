@@ -75,6 +75,7 @@ int avanzar(automovil* a){
 	if (a->anterior == 251 || a->anterior == 263 || a->anterior == 275 || a->anterior == 287 || a->anterior == 299)
 		if (Sucesores[Sucesores[a->posicion][a->destino[1]]][a->destino[1]]-1 == a->anterior)
 			return a->posicion + 1;
+	// De G, ..., L van a ingresar al puente
 	if (a->anterior == 179 || a->anterior == 191 || a->anterior == 203 || a->anterior == 215 || a->anterior == 227){
 		switch(a->posicion){
 			case 644: sentido_puente[0] = 1; return a->posicion + 1;
@@ -84,6 +85,7 @@ int avanzar(automovil* a){
 			case 668: sentido_puente[4] = 1; return a->posicion + 1;			
 		}
 	}
+	// De M, ..., R van a ingresar al puente
 	if (a->anterior == 257 || a->anterior == 269 || a->anterior == 281 || a->anterior == 293 || a->anterior == 305){
 		switch(a->posicion){
 			case 649: sentido_puente[0] = -1; return a->posicion - 1;
@@ -93,23 +95,28 @@ int avanzar(automovil* a){
 			case 673: sentido_puente[4] = -1; return a->posicion - 1;			
 		}
 	}
+	//Del puente a Underground y Uptown
 	switch(a->posicion){
+		//Del puente a Underground
 		case 649: if (sentido_puente[0] == 1) return 246;
 		case 655: if (sentido_puente[1] == 1) return 258;
 		case 661: if (sentido_puente[2] == 1) return 270;
 		case 667: if (sentido_puente[3] == 1) return 282;
 		case 673: if (sentido_puente[4] == 1) return 294;
+		//Del puente a Uptown
 		case 644: if (sentido_puente[0] == -1) return 180;
 		case 650: if (sentido_puente[1] == -1) return 192;
 		case 656: if (sentido_puente[2] == -1) return 204;
 		case 662: if (sentido_puente[3] == -1) return 216;
 		case 668: if (sentido_puente[4] == -1) return 228;
 	}
+	//Para avanzar sobre el puente
 	if ((a->posicion >= 645 && a->posicion <= 648) || (a->posicion >= 651 && a->posicion <= 654) ||
 	(a->posicion >= 657 && a->posicion <= 660) || (a->posicion >= 663 && a->posicion <= 666) ||
 	(a->posicion >= 669 && a->posicion <= 672) ){
 		return a->posicion + sentido_puente[(a->posicion-645) / 6];
 	}
+
 	a->anterior = a->posicion;
 	return Sucesores[a->posicion][a->destino[1]];
 }
